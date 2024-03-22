@@ -127,7 +127,7 @@ namespace Defines
     {
         Normal,
         Awaken,
-        Speciality,
+        Ability,
         Relic,
     }
 
@@ -150,6 +150,7 @@ namespace Defines
     {
         Training,
         Awaken,
+        Ability,
         SummonWeapon,
         SummonArmor,
         SummonSkill,
@@ -218,6 +219,7 @@ public enum ECurrencyType
     Dia, // 다이아
     EnhanceStone, // 강화석
     AwakenStone, // 각성석
+    AbilityStone, // 어빌리티 스톤
     WeaponSummonTicket, // 무기 소환 티켓
     ArmorSummonTicket, // 방어구 소환 티켓
     GoldInvitation, // 골드 던전 입장권
@@ -287,4 +289,14 @@ public enum ERarity
 
     None
     // 기타 희귀도...
+}
+
+public enum Rank
+{
+    SS,
+    S,
+    A,
+    B,
+    C,
+    None,
 }

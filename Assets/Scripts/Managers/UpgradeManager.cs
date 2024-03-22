@@ -36,9 +36,15 @@ public class UpgradeManager : MonoBehaviour
     public event Action<float> onAwakenAttackSpeed;
     public event Action<int> onAwakenSkillMultiplier;
 
+    // TODO : 작업할 것
+    //public event Action<>
+
     [field: SerializeField] public StatUpgradeInfo[] statUpgradeInfo { get; protected set; }
 
     [field: SerializeField] public AwakenUpgradeInfo[] awakenUpgradeInfo { get; protected set; }
+
+    [field: SerializeField] public AbilityUpgradeInfo[] abilityUpgradeInfo { get; protected set; }
+    [SerializeField] private AbilityCalculator abilityCalculator;
 
     // [field: SerializeField] public SpecialityUpgradeInfo[] specialityUpgradeInfo { get; protected set; }
     // [field: SerializeField] public RelicUpgradeInfo[] relicUpgradeInfo { get; protected set; }
@@ -148,6 +154,45 @@ public class UpgradeManager : MonoBehaviour
         
         info.LevelUP();
         
+        onAwakenUpgrade?.Invoke(info.statusType, info.level);
+    }
+
+    public void UpgradePercentStatus(AbilityUpgradeInfo info)
+    {
+        var status = PlayerManager.instance.status;
+        var score = new BigInteger(status.BattleScore.ToString());
+
+        int percent = abilityCalculator.GetRandomPercent(info.rankUpgradeRangeArray);
+        PlayerManager.instance.status.ChangePercentStat(info.statusType, new BigInteger(percent));
+
+        /*switch (info.statusType)
+        {
+            case EStatusType.ATK:
+                onAwakenAttack?.Invoke(info.upgradePerLevelInt);
+                break;
+            case EStatusType.CRIT_DMG:
+                onAwakenCriticalDamage?.Invoke(info.upgradePerLevelInt);
+                break;
+            case EStatusType.SKILL_DMG:
+                onAwakenSkillMultiplier?.Invoke(info.upgradePerLevelInt);
+                break;
+            case EStatusType.DMG_REDU:
+                onAwakenDamageReduction?.Invoke(info.upgradePerLevelFloat);
+                break;
+            case EStatusType.CRIT_CH:
+                onAwakenCriticalChance?.Invoke(info.upgradePerLevelFloat);
+                break;
+            case EStatusType.ATK_SPD:
+                onAwakenAttackSpeed?.Invoke(info.upgradePerLevelFloat);
+                break;
+        }*/
+
+        PlayerManager.instance.status.InitBattleScore();
+        MessageUIManager.instance.ShowPower(status.BattleScore, status.BattleScore - score);
+
+        // TODO : 점검
+        info.LevelUP();
+
         onAwakenUpgrade?.Invoke(info.statusType, info.level);
     }
 
@@ -327,6 +372,67 @@ public class StatUpgradeInfo
     public bool CheckUpgradeCondition()
     {
         if (level >= maxLevel || cost > CurrencyManager.instance.GetCurrency(currencyType))
+            return false;
+        return true;
+    }
+
+    public void Init()
+    {
+        level = 0;
+        cost = baseCost;
+    }
+}
+
+[Serializable]
+public class AbilityUpgradeInfo
+{
+    public string title => info.title;
+    public int level;
+
+    // 업글 관련
+    public EStatusType statusType => info.statusType;
+    public RankUpgradeRange[] rankUpgradeRangeArray => info.rankUpgradeRangeArray;
+
+    // 비용 관련
+    public ECurrencyType currencyType => info.currencyType;
+    public int baseCost => info.baseCost;
+    public int increaseCostPerLevel => info.increaseCostPerLevel;
+
+    public BigInteger cost;
+
+    // 꾸미기 관련
+    public Sprite image => info.image;
+
+    [SerializeField] private AbilityUpgradeFixedInfo info;
+
+    public void LevelUP()
+    {
+        ++level;
+        cost += (cost * increaseCostPerLevel) / 100;
+        Save();
+    }
+
+    public void Save()
+    {
+        DataManager.Instance.Save($"{nameof(AbilityUpgradeInfo)}_{statusType.ToString()}_{nameof(level)}", level);
+        DataManager.Instance.Save($"{nameof(AbilityUpgradeInfo)}_{statusType.ToString()}_{nameof(cost)}", cost.ToString());
+    }
+
+    public void Load()
+    {
+        level = DataManager.Instance.Load($"{nameof(AbilityUpgradeInfo)}_{statusType.ToString()}_{nameof(level)}", level);
+        cost = new BigInteger(DataManager.Instance.Load<string>(
+            $"{nameof(AbilityUpgradeInfo)}_{statusType.ToString()}_{nameof(cost)}", baseCost.ToString()));
+
+        //if (upgradePerLevelInt != 0)
+        //    UpgradeManager.instance.InitStatus(statusType, (new BigInteger(upgradePerLevelInt)) * level);
+        //else
+        //    UpgradeManager.instance.InitStatus(statusType, (upgradePerLevelFloat) * level);
+    }
+
+    public bool CheckUpgradeCondition()
+    {
+        if (cost > CurrencyManager.instance.GetCurrency(currencyType))
             return false;
         return true;
     }

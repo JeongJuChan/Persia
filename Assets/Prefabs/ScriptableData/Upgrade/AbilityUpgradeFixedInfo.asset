@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe6db58a502189f4d9c83cd254074d7e, type: 3}
+  m_Name: AbilityUpgradeFixedInfo
+  m_EditorClassIdentifier: 
+  title: "\uACF5\uACA9\uB825 \uC99D\uAC00"
+  statusType: 0
+  rankUpgradeRange:
+  - rank: 0
+    upgradeMinInt: 81
+    upgradeMaxIntExclusive: 101
+  - rank: 1
+    upgradeMinInt: 61
+    upgradeMaxIntExclusive: 81
+  - rank: 2
+    upgradeMinInt: 41
+    upgradeMaxIntExclusive: 61
+  - rank: 3
+    upgradeMinInt: 21
+    upgradeMaxIntExclusive: 41
+  - rank: 4
+    upgradeMinInt: 1
+    upgradeMaxIntExclusive: 21
+  currencyType: 4
+  baseCost: 0
+  increaseCostPerLevel: 0
+  image: {fileID: 0}

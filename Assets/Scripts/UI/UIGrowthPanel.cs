@@ -24,12 +24,13 @@ public class UIGrowthPanel : UIPanel
     [SerializeField] private GameObject[] awakenUis;
     [SerializeField] private RectTransform awakenRoot;
 
-    // 미정
-    // [SerializeField] private 미정 무언가Prefab;
-    // private ObjectPool<미정> 무언가Pool;
-    // private LinkedList<미정> 무언가OpenedUI;
-    // [SerializeField] private GameObject[] 무언가UIs;
-    // [SerializeField] private RectTransform 무언가Root;
+    // 어빌리티 => 던전에서 나오는 재화로만 올릴 수 있는 능력치
+    [Header("어빌리티")][SerializeField] private UIAbilityBar abilityBarPrefab;
+    private CustomPool<UIAbilityBar> abilityPool;
+    [SerializeField] private int abilityPoolSize;
+    [SerializeField] private GameObject[] abilityUis;
+    [SerializeField] private RectTransform abilityRoot;
+
     [Header("Currency")]
     public UICurrencyUpdater currencyUI;
     private ETrainingType currentTab;
@@ -150,17 +151,17 @@ public class UIGrowthPanel : UIPanel
 
                 ControlUICurrency(ECurrencyType.AwakenStone);
                 break;
-            // case ETrainingType.Speciality:
-            //     foreach (var ui in specialityUis)
-            //     {
-            //         ui.SetActive(true);
-            //     }
-            //     foreach (var item in UpgradeManager.instance.specialityUpgradeInfo)
-            //     {
-            //         var obj = specialityPool.Get();
-            //         obj.ShowUI(item);
-            //     }
-            //     break;
+            case ETrainingType.Ability:
+                foreach (var ui in abilityUis)
+                {
+                    ui.SetActive(true);
+                }
+                foreach (var item in UpgradeManager.instance.abilityUpgradeInfo)
+                {
+                    var obj = abilityPool.Get();
+                    obj.ShowUI(item);
+                }
+                break;
         }
     }
 
@@ -174,9 +175,10 @@ public class UIGrowthPanel : UIPanel
             case ETrainingType.Awaken:
                 awakenPool.Clear();
                 break;
-            // case ETrainingType.Speciality:
-            //     CloseTab(specialityOpenedUi, specialityUis, specialityPool);
-            //     break;
+            case ETrainingType.Ability:
+                abilityPool.Clear();
+                //CloseTab(specialityOpenedUi, specialityUis, specialityPool);
+                break;
         }
     }
 
