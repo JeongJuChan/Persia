@@ -1,4 +1,6 @@
 ﻿using Defines;
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,13 +12,15 @@ public class UIAbilityBar : UIBase
 
     [SerializeField] private Image costImage;
 
-    [SerializeField] private TMP_Text titleText;
-    [SerializeField] private TMP_Text maxLevelText;
     [SerializeField] private TMP_Text levelText;
+    [SerializeField] private TMP_Text rankText;
+    [SerializeField] private TMP_Text upgradeStatText;
     [SerializeField] private TMP_Text costText;
-    [SerializeField] private TMP_Text upgradePerLevelText;
-    [SerializeField] private TMP_Text totalUpgrade;
 
+    [SerializeField] private Color[] colorOfRankArray;
+
+    private Dictionary<Rank, Color> colorOfRankDict = new Dictionary<Rank, Color>();
+    
     private AbilityUpgradeInfo upgradeInfo;
 
     [SerializeField] private RectTransform effectRect;
@@ -62,6 +66,16 @@ public class UIAbilityBar : UIBase
     protected void Awake()
     {
         InitializeBtn();
+        InitColorOfRank();
+    }
+
+    private void InitColorOfRank()
+    {
+        Rank[] ranks = Enum.GetValues(typeof(Rank)) as Rank[];
+        for (int i = 0; i < ranks.Length - 1; i++)
+        {
+            colorOfRankDict.Add(ranks[i], colorOfRankArray[i]);
+        }
     }
 
     private void InitializeBtn()
@@ -79,7 +93,7 @@ public class UIAbilityBar : UIBase
         }
         else
         {
-            MessageUIManager.instance.ShowCenterMessage(CustomText.SetColor("골드", Color.yellow) + "가 부족합니다.");
+            MessageUIManager.instance.ShowCenterMessage(CustomText.SetColor("어빌리티 스톤", Color.yellow) + "가 부족합니다.");
         }
     }
 
@@ -101,34 +115,21 @@ public class UIAbilityBar : UIBase
 
     private void UpdateUI()
     {
-        levelText.text = upgradeInfo.level.ToString();
+        levelText.text = $"Lv.{upgradeInfo.level}";
 
-        // TODO : 점검
-        //if (upgradeInfo.upgradePerLevelInt != 0)
-        //    totalUpgrade.text = $"(+{upgradeInfo.upgradePerLevelInt * upgradeInfo.level})";
-        //else
-        //    totalUpgrade.text = $"(+{(upgradeInfo.upgradePerLevelFloat * upgradeInfo.level * 100):F2}%)";
+        rankText.text = $"[{upgradeInfo.rank}]";
+        rankText.color = colorOfRankDict[upgradeInfo.rank];
 
-        costText.text = upgradeInfo.cost.ChangeToShort();
+        costText.text = upgradeInfo.cost.ToString();
 
         upgradeBtn.interactable = upgradeInfo.CheckUpgradeCondition();
     }
 
     private void InitializeUI()
     {
-        //if (!ReferenceEquals(upgradeInfo.image, null))
-        //    image.sprite = upgradeInfo.image;
-
         costImage.sprite = CurrencyManager.instance.GetIcon(upgradeInfo.currencyType);
 
-        // TODO : 점검
-        //if (upgradeInfo.upgradePerLevelInt != 0)
-        //    upgradePerLevelText.text = upgradeInfo.upgradePerLevelInt.ToString();
-        //else
-        //    upgradePerLevelText.text = (upgradeInfo.upgradePerLevelFloat * 100).ToString("F2") + "%";
-
-        titleText.text = upgradeInfo.title + " <color=#16FF00>+</color>";
-        //maxLevelText.text = upgradeInfo.maxLevel.ToString();
+        upgradeStatText.text = $": {upgradeInfo.title} + {upgradeInfo.percent}";
 
         UpdateUI();
     }

@@ -16,21 +16,18 @@ MonoBehaviour:
   statusType: 6
   rankUpgradeRangeArray:
   - rank: 0
-    upgradeMinInt: 0
-    upgradeMaxInt: 0
-  - rank: 0
-    upgradeMinInt: 0
-    upgradeMaxInt: 0
-  - rank: 0
-    upgradeMinInt: 0
-    upgradeMaxInt: 0
-  - rank: 0
-    upgradeMinInt: 0
-    upgradeMaxInt: 0
-  - rank: 0
-    upgradeMinInt: 0
-    upgradeMaxInt: 0
+    upgradeMinInt: 50
+    upgradeMaxInt: 41
+  - rank: 1
+    upgradeMinInt: 40
+    upgradeMaxInt: 31
+  - rank: 2
+    upgradeMinInt: 30
+    upgradeMaxInt: 21
+  - rank: 3
+    upgradeMinInt: 20
+    upgradeMaxInt: 11
+  - rank: 4
+    upgradeMinInt: 10
+    upgradeMaxInt: 1
   currencyType: 4
-  baseCost: 0
-  increaseCostPerLevel: 0
-  image: {fileID: 0}

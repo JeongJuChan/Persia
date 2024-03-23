@@ -2,7 +2,7 @@ using System;
 using Defines;
 using Keiwando.BigInteger;
 using UnityEngine;
-
+ 
 [Serializable]
 [CreateAssetMenu(menuName = "SO/AwakenUpgradeFixedInfo", fileName = "AwakenUpgradeFixedInfo")]
 public class AwakenUpgradeFixedInfo : ScriptableObject

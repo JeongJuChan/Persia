@@ -1031,7 +1031,7 @@ MonoBehaviour:
   awakenUis: []
   awakenRoot: {fileID: 6436850564346493747}
   abilityBarPrefab: {fileID: -5759891506854544489, guid: 79cfa2b6bc0c2c540871d540842b01af, type: 3}
-  abilityPoolSize: 0
+  abilityPoolSize: 27
   abilityUis: []
   abilityRoot: {fileID: 6436850564346493747}
   currencyUI: {fileID: 2220845470936733661}

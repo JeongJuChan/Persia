@@ -15,11 +15,6 @@ public class AbilityUpgradeFixedInfo : ScriptableObject
 
     // 비용 관련
     public ECurrencyType currencyType;
-    public int baseCost;
-    public int increaseCostPerLevel;
-
-    // 꾸미기 관련
-    public Sprite image;
 }
 
 [Serializable]

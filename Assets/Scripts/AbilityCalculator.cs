@@ -11,12 +11,13 @@ public class AbilityCalculator
     private const int MIN_PERCENT_INT = 1;
     private const int MAX_PERCENT_INT_EXCLUSIVE = 101;
 
-    public int GetRandomPercent(RankUpgradeRange[] upgradeRangeArray)
+    public int GetRandomPercent(RankUpgradeRange[] upgradeRangeArray, out Rank rank)
     {
         int index = GetRankRandomIndex();
         RankUpgradeRange range = upgradeRangeArray[index];
-        int random = UnityEngine.Random.Range(range.upgradeMinInt, range.upgradeMaxInt);
-        return random;
+        int percent = UnityEngine.Random.Range(range.upgradeMinInt, range.upgradeMaxInt);
+        rank = range.rank;
+        return percent;
     }
 
     private int GetRankRandomIndex()
@@ -56,5 +57,9 @@ public class AbilityCalculator
 #endif
     }
 
-    
+    public AbilityUpgradeFixedInfo GetRandomFixedInfo(AbilityUpgradeFixedInfo[] abilityUpgradeFixedInfo)
+    {
+        int index = UnityEngine.Random.Range(0, abilityUpgradeFixedInfo.Length);
+        return abilityUpgradeFixedInfo[index];
+    }
 }

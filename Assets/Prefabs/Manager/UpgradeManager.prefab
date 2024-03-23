@@ -76,14 +76,11 @@ MonoBehaviour:
     info: {fileID: 11400000, guid: 1564e1e462c8b47fb9e4dec7f282df76, type: 2}
   - level: 0
     info: {fileID: 11400000, guid: eef363001684d42149cfc210e2dd7af6, type: 2}
-  <abilityUpgradeInfo>k__BackingField:
-  - level: 0
-    info: {fileID: 11400000, guid: 476f650c17fe7f944aaba5440c2e643d, type: 2}
-  - level: 0
-    info: {fileID: 11400000, guid: f16dba473a6fbb54cadb7bfdfe3b539c, type: 2}
-  - level: 0
-    info: {fileID: 11400000, guid: 639be0f5b29855f458fd8090ce343a23, type: 2}
-  - level: 0
-    info: {fileID: 11400000, guid: bd1f2571e3e35c34d8f8643648109e43, type: 2}
   abilityCalculator:
     rankSO: {fileID: 11400000, guid: 17e99ec0bb753a441b5f937104683ab7, type: 2}
+  abilityBaseCost: 50
+  <abilityUpgradeFixedInfo>k__BackingField:
+  - {fileID: 11400000, guid: 476f650c17fe7f944aaba5440c2e643d, type: 2}
+  - {fileID: 11400000, guid: f16dba473a6fbb54cadb7bfdfe3b539c, type: 2}
+  - {fileID: 11400000, guid: 639be0f5b29855f458fd8090ce343a23, type: 2}
+  - {fileID: 11400000, guid: bd1f2571e3e35c34d8f8643648109e43, type: 2}

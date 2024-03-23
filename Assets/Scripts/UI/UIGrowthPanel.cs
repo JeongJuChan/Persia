@@ -30,6 +30,7 @@ public class UIGrowthPanel : UIPanel
     [SerializeField] private int abilityPoolSize;
     [SerializeField] private GameObject[] abilityUis;
     [SerializeField] private RectTransform abilityRoot;
+    [SerializeField] private int baseCost;
 
     [Header("Currency")]
     public UICurrencyUpdater currencyUI;
@@ -166,7 +167,10 @@ public class UIGrowthPanel : UIPanel
                 {
                     ui.SetActive(true);
                 }
-                foreach (var item in UpgradeManager.instance.abilityUpgradeInfo)
+
+                UpgradeManager.instance.abilitydata.Init();
+
+                foreach (var item in UpgradeManager.instance.abilitydata.abilityUpgradeInfos)
                 {
                     var obj = abilityPool.Get();
                     obj.ShowUI(item);

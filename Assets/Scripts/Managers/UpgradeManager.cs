@@ -45,8 +45,11 @@ public class UpgradeManager : MonoBehaviour
 
     [field: SerializeField] public AwakenUpgradeInfo[] awakenUpgradeInfo { get; protected set; }
 
-    [field: SerializeField] public AbilityUpgradeInfo[] abilityUpgradeInfo { get; protected set; }
+    [Header("어빌리티")]
     [SerializeField] private AbilityCalculator abilityCalculator;
+    [SerializeField] private int abilityBaseCost;
+    [field: SerializeField] public AbilityUpgradeFixedInfo[] abilityUpgradeFixedInfo { get; protected set; }
+    [field: SerializeField] public AbilityData abilitydata { get; private set; }
 
     // [field: SerializeField] public SpecialityUpgradeInfo[] specialityUpgradeInfo { get; protected set; }
     // [field: SerializeField] public RelicUpgradeInfo[] relicUpgradeInfo { get; protected set; }
@@ -164,8 +167,14 @@ public class UpgradeManager : MonoBehaviour
         var status = PlayerManager.instance.status;
         var score = new BigInteger(status.BattleScore.ToString());
 
-        int percent = abilityCalculator.GetRandomPercent(info.rankUpgradeRangeArray);
+        AbilityUpgradeFixedInfo fixedInfo = abilityCalculator.GetRandomFixedInfo(abilityUpgradeFixedInfo);
+        int percent = abilityCalculator.GetRandomPercent(fixedInfo.rankUpgradeRangeArray, out Rank rank);
         PlayerManager.instance.status.ChangePercentStat(info.statusType, new BigInteger(percent));
+
+        info.title = fixedInfo.title;
+        info.percent = percent;
+        info.rank = rank;
+        info.Save();
 
         switch (info.statusType)
         {
@@ -185,9 +194,6 @@ public class UpgradeManager : MonoBehaviour
 
         PlayerManager.instance.status.InitBattleScore();
         MessageUIManager.instance.ShowPower(status.BattleScore, status.BattleScore - score);
-
-        // TODO : 점검
-        info.LevelUP();
 
         onAwakenUpgrade?.Invoke(info.statusType, info.level);
     }
@@ -379,51 +385,34 @@ public class StatUpgradeInfo
     }
 }
 
-[Serializable]
 public class AbilityUpgradeInfo
 {
-    public string title => info.title;
+    public string title;
     public int level;
+    public int percent;
+    public Rank rank = Rank.C;
 
     // 업글 관련
-    public EStatusType statusType => info.statusType;
-    public RankUpgradeRange[] rankUpgradeRangeArray => info.rankUpgradeRangeArray;
+    public EStatusType statusType;
 
     // 비용 관련
-    public ECurrencyType currencyType => info.currencyType;
-    public int baseCost => info.baseCost;
-    public int increaseCostPerLevel => info.increaseCostPerLevel;
-
-    public BigInteger cost;
-
-    // 꾸미기 관련
-    public Sprite image => info.image;
-
-    [SerializeField] private AbilityUpgradeFixedInfo info;
-
-    public void LevelUP()
-    {
-        ++level;
-        cost += (cost * increaseCostPerLevel) / 100;
-        Save();
-    }
+    public ECurrencyType currencyType;
+    public int cost;
 
     public void Save()
     {
-        DataManager.Instance.Save($"{nameof(AbilityUpgradeInfo)}_{statusType.ToString()}_{nameof(level)}", level);
-        DataManager.Instance.Save($"{nameof(AbilityUpgradeInfo)}_{statusType.ToString()}_{nameof(cost)}", cost.ToString());
+        DataManager.Instance.Save($"{level}_{nameof(title)}", title);
+        DataManager.Instance.Save($"{level}_{nameof(rank)}", rank);
+        DataManager.Instance.Save($"{level}_{nameof(percent)}", percent);
     }
 
     public void Load()
     {
-        level = DataManager.Instance.Load($"{nameof(AbilityUpgradeInfo)}_{statusType.ToString()}_{nameof(level)}", level);
-        cost = new BigInteger(DataManager.Instance.Load<string>(
-            $"{nameof(AbilityUpgradeInfo)}_{statusType.ToString()}_{nameof(cost)}", baseCost.ToString()));
+        DataManager.Instance.Load($"{level}_{nameof(title)}", title);
+        DataManager.Instance.Load($"{level}_{nameof(rank)}", rank);
+        DataManager.Instance.Load($"{level}_{nameof(percent)}", percent);
 
-        //if (upgradePerLevelInt != 0)
-        //    UpgradeManager.instance.InitStatus(statusType, (new BigInteger(upgradePerLevelInt)) * level);
-        //else
-        //    UpgradeManager.instance.InitStatus(statusType, (upgradePerLevelFloat) * level);
+        UpgradeManager.instance.InitStatus(statusType, new BigInteger(percent));
     }
 
     public bool CheckUpgradeCondition()
@@ -431,11 +420,5 @@ public class AbilityUpgradeInfo
         if (cost > CurrencyManager.instance.GetCurrency(currencyType))
             return false;
         return true;
-    }
-
-    public void Init()
-    {
-        level = 0;
-        cost = baseCost;
     }
 }
