@@ -8,8 +8,6 @@ public class UIAbilityBar : UIBase
 {
     [SerializeField] private HoldCheckerButton upgradeBtn;
 
-    [SerializeField] private Image image;
-
     [SerializeField] private Image costImage;
 
     [SerializeField] private TMP_Text titleText;
@@ -89,15 +87,10 @@ public class UIAbilityBar : UIBase
     {
         if (CurrencyManager.instance.SubtractCurrency(upgradeInfo.currencyType, upgradeInfo.cost))
         {
-            // TODO : 점검
-            //if (upgradeInfo.upgradePerLevelInt != 0)
-            //    UpgradeManager.instance.UpgradePercentStatus(upgradeInfo);
-            //else
-            //    UpgradeManager.instance.UpgradePercentStatus(upgradeInfo);
+            UpgradeManager.instance.UpgradePercentStatus(upgradeInfo);
 
             // Show Effect
-            UIEffectManager.instance.ShowUpgradeEffect(image.transform);
-
+            //UIEffectManager.instance.ShowUpgradeEffect(image.transform);
             return true;
         }
         else
@@ -123,8 +116,8 @@ public class UIAbilityBar : UIBase
 
     private void InitializeUI()
     {
-        if (!ReferenceEquals(upgradeInfo.image, null))
-            image.sprite = upgradeInfo.image;
+        //if (!ReferenceEquals(upgradeInfo.image, null))
+        //    image.sprite = upgradeInfo.image;
 
         costImage.sprite = CurrencyManager.instance.GetIcon(upgradeInfo.currencyType);
 

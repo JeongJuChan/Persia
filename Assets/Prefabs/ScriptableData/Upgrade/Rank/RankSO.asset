@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f79260ae1923d294794be01c02f41afc, type: 3}
   m_Name: RankSO
   m_EditorClassIdentifier: 
-  rankUpgradeRange:
+  percentagePerRankArray:
   - rank: 0
-    percentage: 0
-  - rank: 0
-    percentage: 0
-  - rank: 0
-    percentage: 0
-  - rank: 0
-    percentage: 0
-  - rank: 0
-    percentage: 0
+    percentage: 1
+  - rank: 1
+    percentage: 9
+  - rank: 2
+    percentage: 20
+  - rank: 3
+    percentage: 30
+  - rank: 4
+    percentage: 40

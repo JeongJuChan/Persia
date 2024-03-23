@@ -44,6 +44,11 @@ public class UIGrowthPanel : UIPanel
     [SerializeField] private Transform awakenCriticalDamageQuestRoot;
     [SerializeField] private Transform awakenAttackSpeedQuestRoot;
     [SerializeField] private Transform awakenSkillMultiplierQuestRoot;
+    
+    [SerializeField] private Transform abilityAttackQuestRoot;
+    [SerializeField] private Transform abilityHealthQuestRoot;
+    [SerializeField] private Transform abilityCriticalDamageQuestRoot;
+    [SerializeField] private Transform abilitySkillDamageQuestRoot;
 
     public override UIBase InitUI(UIBase parent)
     {
@@ -58,6 +63,11 @@ public class UIGrowthPanel : UIPanel
             x => x.actOnCallback += () => awakenPool.Release(x),
             x => x.transform.SetAsLastSibling(),
             null, awakenPoolSize, true);
+
+        abilityPool = EasyUIPooling.MakePool(abilityBarPrefab, abilityRoot,
+            x => x.actOnCallback += () => abilityPool.Release(x),
+            x => x.transform.SetAsLastSibling(),
+            null, abilityPoolSize, true);
 
         currencyUI.InitUI(this);
         return this;
@@ -160,7 +170,17 @@ public class UIGrowthPanel : UIPanel
                 {
                     var obj = abilityPool.Get();
                     obj.ShowUI(item);
+                    if (item.statusType == EStatusType.ATK)
+                        abilityAttackQuestRoot = obj.GetButtonRect();
+                    else if (item.statusType == EStatusType.HP) 
+                        abilityHealthQuestRoot = obj.GetButtonRect();
+                    else if (item.statusType == EStatusType.CRIT_DMG)
+                        abilityCriticalDamageQuestRoot = obj.GetButtonRect();
+                    else if (item.statusType == EStatusType.SKILL_DMG)
+                        abilitySkillDamageQuestRoot = obj.GetButtonRect();
                 }
+
+                ControlUICurrency(ECurrencyType.AbilityStone);
                 break;
         }
     }

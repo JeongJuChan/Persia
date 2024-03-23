@@ -36,8 +36,10 @@ public class UpgradeManager : MonoBehaviour
     public event Action<float> onAwakenAttackSpeed;
     public event Action<int> onAwakenSkillMultiplier;
 
-    // TODO : 작업할 것
-    //public event Action<>
+    public event Action<int> onAbilityAttack;
+    public event Action<int> onAbilityHealth;
+    public event Action<int> onAbilityCriticalDamage;
+    public event Action<int> onAbilitySkillDamage;
 
     [field: SerializeField] public StatUpgradeInfo[] statUpgradeInfo { get; protected set; }
 
@@ -165,27 +167,21 @@ public class UpgradeManager : MonoBehaviour
         int percent = abilityCalculator.GetRandomPercent(info.rankUpgradeRangeArray);
         PlayerManager.instance.status.ChangePercentStat(info.statusType, new BigInteger(percent));
 
-        /*switch (info.statusType)
+        switch (info.statusType)
         {
             case EStatusType.ATK:
-                onAwakenAttack?.Invoke(info.upgradePerLevelInt);
+                onAbilityAttack?.Invoke(percent);
+                break;
+            case EStatusType.HP:
+                onAbilityHealth?.Invoke(percent);
                 break;
             case EStatusType.CRIT_DMG:
-                onAwakenCriticalDamage?.Invoke(info.upgradePerLevelInt);
+                onAbilityCriticalDamage?.Invoke(percent);
                 break;
             case EStatusType.SKILL_DMG:
-                onAwakenSkillMultiplier?.Invoke(info.upgradePerLevelInt);
+                onAbilitySkillDamage?.Invoke(percent);
                 break;
-            case EStatusType.DMG_REDU:
-                onAwakenDamageReduction?.Invoke(info.upgradePerLevelFloat);
-                break;
-            case EStatusType.CRIT_CH:
-                onAwakenCriticalChance?.Invoke(info.upgradePerLevelFloat);
-                break;
-            case EStatusType.ATK_SPD:
-                onAwakenAttackSpeed?.Invoke(info.upgradePerLevelFloat);
-                break;
-        }*/
+        }
 
         PlayerManager.instance.status.InitBattleScore();
         MessageUIManager.instance.ShowPower(status.BattleScore, status.BattleScore - score);

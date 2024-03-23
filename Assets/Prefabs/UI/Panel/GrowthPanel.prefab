@@ -1020,6 +1020,7 @@ MonoBehaviour:
   bottomToggles:
   - {fileID: 7026682757269842269}
   - {fileID: 4190054904736001703}
+  - {fileID: 860113298907479894}
   bottomToggleGroup: {fileID: 3273310222374076123}
   statBarPrefab: {fileID: 5917395667172649364, guid: a56e911632faf4bd5a42935fcd783137, type: 3}
   statBarPoolSize: 5
@@ -1029,6 +1030,10 @@ MonoBehaviour:
   awakenPoolSize: 0
   awakenUis: []
   awakenRoot: {fileID: 6436850564346493747}
+  abilityBarPrefab: {fileID: -5759891506854544489, guid: 79cfa2b6bc0c2c540871d540842b01af, type: 3}
+  abilityPoolSize: 0
+  abilityUis: []
+  abilityRoot: {fileID: 6436850564346493747}
   currencyUI: {fileID: 2220845470936733661}
   questGuide: {fileID: 1929708703255884534}
   attackQuestRoot: {fileID: 0}
@@ -1039,6 +1044,10 @@ MonoBehaviour:
   awakenCriticalDamageQuestRoot: {fileID: 0}
   awakenAttackSpeedQuestRoot: {fileID: 0}
   awakenSkillMultiplierQuestRoot: {fileID: 0}
+  abilityAttackQuestRoot: {fileID: 0}
+  abilityHealthQuestRoot: {fileID: 0}
+  abilityCriticalDamageQuestRoot: {fileID: 0}
+  abilitySkillDamageQuestRoot: {fileID: 0}
 --- !u!114 &6031821312134388369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2885,7 +2894,7 @@ GameObject:
   - component: {fileID: 6227126369414017746}
   - component: {fileID: 8422956004223742893}
   - component: {fileID: 8636015674466539412}
-  - component: {fileID: 284129760272295819}
+  - component: {fileID: 860113298907479894}
   m_Layer: 5
   m_Name: Ability
   m_TagString: Untagged
@@ -2969,7 +2978,7 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.29803923}
   m_EffectDistance: {x: 0, y: -6}
   m_UseGraphicAlpha: 1
---- !u!114 &284129760272295819
+--- !u!114 &860113298907479894
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2978,7 +2987,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7675139424120448226}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -3001,7 +3010,7 @@ MonoBehaviour:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 21300000, guid: a462fd4da21624bb2a9bcac90db384f7, type: 3}
     m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 21300000, guid: a462fd4da21624bb2a9bcac90db384f7, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -3010,9 +3019,13 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 8422956004223742893}
-  m_OnClick:
+  toggleTransition: 1
+  graphic: {fileID: 4505301928505826056}
+  m_Group: {fileID: 3273310222374076123}
+  onValueChanged:
     m_PersistentCalls:
       m_Calls: []
+  m_IsOn: 0
 --- !u!1 &7842786765473412454
 GameObject:
   m_ObjectHideFlags: 0
@@ -3636,7 +3649,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7468883184996737056, guid: db07a2f97503840d3a5ffd5fd8157bd5, type: 3}
       propertyPath: message
-      value: "\uCD94\uAC00 \uC608\uC815 \uAE30\uB2A5\uC785\uB2C8\uB2E4."
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7468883184996737056, guid: db07a2f97503840d3a5ffd5fd8157bd5, type: 3}
+      propertyPath: isQuestLock
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
