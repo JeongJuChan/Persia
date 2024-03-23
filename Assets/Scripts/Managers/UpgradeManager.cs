@@ -47,9 +47,9 @@ public class UpgradeManager : MonoBehaviour
 
     [Header("어빌리티")]
     [SerializeField] private AbilityCalculator abilityCalculator;
-    [SerializeField] private int abilityBaseCost;
     [field: SerializeField] public AbilityUpgradeFixedInfo[] abilityUpgradeFixedInfo { get; protected set; }
     [field: SerializeField] public AbilityData abilitydata { get; private set; }
+    private AbilityUpgradeInfo preUpgradeInfo = new AbilityUpgradeInfo();
 
     // [field: SerializeField] public SpecialityUpgradeInfo[] specialityUpgradeInfo { get; protected set; }
     // [field: SerializeField] public RelicUpgradeInfo[] relicUpgradeInfo { get; protected set; }
@@ -167,14 +167,23 @@ public class UpgradeManager : MonoBehaviour
         var status = PlayerManager.instance.status;
         var score = new BigInteger(status.BattleScore.ToString());
 
+        preUpgradeInfo.SetType(info.statusType);
+        preUpgradeInfo.SetUpgradeInfo(info.rank, info.percent);
+
         AbilityUpgradeFixedInfo fixedInfo = abilityCalculator.GetRandomFixedInfo(abilityUpgradeFixedInfo);
         int percent = abilityCalculator.GetRandomPercent(fixedInfo.rankUpgradeRangeArray, out Rank rank);
+
+        
+
+        info.SetType(fixedInfo.statusType);
+        info.SetTitle(fixedInfo.title);
+        info.SetUpgradeInfo(rank, percent);
+
+        PlayerManager.instance.status.ChangePercentStat(preUpgradeInfo.statusType, new BigInteger(-preUpgradeInfo.percent));
         PlayerManager.instance.status.ChangePercentStat(info.statusType, new BigInteger(percent));
 
-        info.title = fixedInfo.title;
-        info.percent = percent;
-        info.rank = rank;
         info.Save();
+
 
         switch (info.statusType)
         {
@@ -235,6 +244,11 @@ public class UpgradeManager : MonoBehaviour
         {
             upgradeInfo.Load();
         }
+
+        foreach (var upgradeInfo in abilitydata.abilityUpgradeInfos)
+        {
+            upgradeInfo.Load();
+        }
     }
 
     public void SaveUpgradeInfo()
@@ -265,7 +279,7 @@ public class AwakenUpgradeInfo
     public int upgradePerLevelInt => info.upgradePerLevelInt;
     public float upgradePerLevelFloat => info.upgradePerLevelFloat;
 
-    // 비용 관련
+    // 비용 관련 
     public ECurrencyType currencyType => info.currencyType;
     public int baseCost => info.baseCost;
     public int increaseCostPerLevel => info.increaseCostPerLevel;
@@ -399,18 +413,47 @@ public class AbilityUpgradeInfo
     public ECurrencyType currencyType;
     public int cost;
 
+    public void SetCurrency(ECurrencyType type)
+    {
+        currencyType = type;
+    }
+
+    public void SetUpgradeInfo(Rank rank, int percent)
+    {
+        this.rank = rank;
+        this.percent = percent;
+    }
+
+    public void SetTitle(string title)
+    {
+        this.title = title;
+    }
+
+    public void SetType(EStatusType type)
+    {
+        statusType = type;
+    }
+
+    public void SetCostInfo(AbilityFixedCostInfo info)
+    {
+        level = info.level;
+        cost = info.cost;
+    }
+
+    
+
     public void Save()
     {
         DataManager.Instance.Save($"{level}_{nameof(title)}", title);
         DataManager.Instance.Save($"{level}_{nameof(rank)}", rank);
         DataManager.Instance.Save($"{level}_{nameof(percent)}", percent);
     }
-
+     
     public void Load()
     {
-        DataManager.Instance.Load($"{level}_{nameof(title)}", title);
-        DataManager.Instance.Load($"{level}_{nameof(rank)}", rank);
-        DataManager.Instance.Load($"{level}_{nameof(percent)}", percent);
+        title = DataManager.Instance.Load($"{level}_{nameof(title)}", title);
+        rank = DataManager.Instance.Load($"{level}_{nameof(rank)}", rank);
+        percent = DataManager.Instance.Load($"{level}_{nameof(percent)}", percent);
 
         UpgradeManager.instance.InitStatus(statusType, new BigInteger(percent));
     }

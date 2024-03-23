@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
 [CreateAssetMenu(menuName = "SO/AbilityFixedCostInfo", fileName = "AbilityFixedCostInfo")]

@@ -70,6 +70,9 @@ public class UIGrowthPanel : UIPanel
             x => x.transform.SetAsLastSibling(),
             null, abilityPoolSize, true);
 
+        UpgradeManager.instance.abilitydata.Init();
+
+
         currencyUI.InitUI(this);
         return this;
     }
@@ -107,6 +110,7 @@ public class UIGrowthPanel : UIPanel
     {
         currencyUI.ShowCurrency(ECurrencyType.Gold, type == ECurrencyType.Gold);
         currencyUI.ShowCurrency(ECurrencyType.AwakenStone, type == ECurrencyType.AwakenStone);
+        currencyUI.ShowCurrency(ECurrencyType.AbilityStone, type == ECurrencyType.AbilityStone);
     }
 
     public void ChangeTab(ETrainingType type)
@@ -168,7 +172,6 @@ public class UIGrowthPanel : UIPanel
                     ui.SetActive(true);
                 }
 
-                UpgradeManager.instance.abilitydata.Init();
 
                 foreach (var item in UpgradeManager.instance.abilitydata.abilityUpgradeInfos)
                 {

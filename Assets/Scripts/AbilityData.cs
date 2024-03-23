@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class AbilityData
 {
     public List<AbilityUpgradeInfo> abilityUpgradeInfos { get; private set; } = new List<AbilityUpgradeInfo>();
@@ -12,11 +13,10 @@ public class AbilityData
         foreach (var costInfo in fixedCostInfos)
         {
             AbilityUpgradeInfo info = new AbilityUpgradeInfo();
-            info.level = costInfo.level;
 
-            info.cost = costInfo.cost;
+            info.SetCostInfo(costInfo);
+            info.SetCurrency(ECurrencyType.AbilityStone);
 
-            info.Load();
             abilityUpgradeInfos.Add(info);
         }
     }

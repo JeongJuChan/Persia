@@ -65,8 +65,14 @@ public class UIAbilityBar : UIBase
 
     protected void Awake()
     {
+        Init();
         InitializeBtn();
         InitColorOfRank();
+    }
+
+    private void Init()
+    {
+        
     }
 
     private void InitColorOfRank()
@@ -119,6 +125,7 @@ public class UIAbilityBar : UIBase
 
         rankText.text = $"[{upgradeInfo.rank}]";
         rankText.color = colorOfRankDict[upgradeInfo.rank];
+        UpdateDescription();
 
         costText.text = upgradeInfo.cost.ToString();
 
@@ -129,9 +136,16 @@ public class UIAbilityBar : UIBase
     {
         costImage.sprite = CurrencyManager.instance.GetIcon(upgradeInfo.currencyType);
 
-        upgradeStatText.text = $": {upgradeInfo.title} + {upgradeInfo.percent}";
+        UpdateDescription();
 
         UpdateUI();
+    }
+
+    private void UpdateDescription()
+    {
+        upgradeStatText.text = upgradeInfo.percent == 0 ?
+                    ": 없음" :
+                    $": {upgradeInfo.title} + {upgradeInfo.percent}%";
     }
 
     protected override void OnDisable()

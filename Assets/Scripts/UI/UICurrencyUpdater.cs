@@ -43,6 +43,11 @@ public class UICurrencyUpdater : UIBase
                 case ECurrencyType.Gold:
                 case ECurrencyType.EnhanceStone:
                 case ECurrencyType.AwakenStone:
+                    ui.text = amount;
+                    break;
+                case ECurrencyType.AbilityStone:
+                    ui.text = amount;
+                    break;
                 case ECurrencyType.WeaponSummonTicket:
                 case ECurrencyType.ArmorSummonTicket:
                 case ECurrencyType.Exp:

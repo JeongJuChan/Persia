@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9823b0bc1fbdbb4a8631ab433f31be1, type: 3}
   m_Name: AbilityFixedCostInfo 1
   m_EditorClassIdentifier: 
-  level: 0
-  cost: 0
+  level: 2
+  cost: 70
