@@ -165,6 +165,7 @@ public class UpgradeManager : MonoBehaviour
     public void UpgradePercentStatus(AbilityUpgradeInfo info)
     {
         var status = PlayerManager.instance.status;
+        PlayerManager.instance.status.InitBattleScore();
         var score = new BigInteger(status.BattleScore.ToString());
 
         preUpgradeInfo.SetType(info.statusType);
