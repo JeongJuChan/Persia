@@ -20,7 +20,7 @@ public class UISummonList : UIPanel
     [SerializeField] private TMP_Text summonCounter;
 
     [SerializeField] private Toggle autoSummon;
-    private bool isAuto;
+    public bool IsAuto { get; private set; } = false;
     [SerializeField] private Toggle fastSummon;
     private bool isFast;
     [SerializeField] private Button summon;
@@ -44,16 +44,68 @@ public class UISummonList : UIPanel
     {
         base.InitializeBtns();
 
-        summon.onClick.AddListener(() =>
+        summon.onClick.AddListener(TrySummon);
+        autoSummon.onValueChanged.AddListener((onoff) => IsAuto = onoff);
+        fastSummon.onValueChanged.AddListener((onoff) => isFast = onoff);
+        skipBackground.onClick.AddListener(() => { isSkip = true; });
+    }
+
+    public override void CloseUI(float afterseconds)
+    {
+        base.CloseUI(afterseconds);
+        IsAuto = false;
+        isFast = false;
+    }
+
+    /*private void TrySummon()
+    {
+        if (SummonManager.instance.CalculateCost(type, amount, out int costDia, out int costTicket))
         {
-            if (SummonManager.instance.CalculateCost(type, amount, out int costDia, out int costTicket))
+            ClearUI();
+            SetForStartSummon();
+            switch (type)
             {
-                ClearUI();
-                SetForStartSummon();
-                switch (type)
-                {
-                    case EEquipmentType.Weapon:
-                    case EEquipmentType.Armor:
+                case EEquipmentType.Weapon:
+                case EEquipmentType.Armor:
+                    {
+                        int cost;
+                        ECurrencyType costType;
+                        if (costTicket > 0)
+                        {
+                            cost = costTicket;
+                            costType = type == EEquipmentType.Weapon ? ECurrencyType.WeaponSummonTicket : ECurrencyType.ArmorSummonTicket;
+                        }
+                        else
+                        {
+                            cost = costDia;
+                            costType = ECurrencyType.Dia;
+                        }
+                        SummonManager.instance.StartSummonItems(type, amount, costType, cost, TrySummon);
+                        break;
+                    }
+                case EEquipmentType.Skill:
+                    {
+                        SummonManager.instance.StartSummonSkills(amount, costDia);
+                        break;
+                    }
+            }
+        }
+        else
+        {
+            MessageUIManager.instance.ShowCenterMessage(CustomText.SetColor("재화", Color.red) + "가 부족합니다.");
+        }
+    }*/
+
+    public void TrySummon()
+    {
+        if (SummonManager.instance.CalculateCost(type, amount, out int costDia, out int costTicket))
+        {
+            ClearUI();
+            SetForStartSummon();
+            switch (type)
+            {
+                case EEquipmentType.Weapon:
+                case EEquipmentType.Armor:
                     {
                         int cost;
                         ECurrencyType costType;
@@ -70,21 +122,17 @@ public class UISummonList : UIPanel
                         SummonManager.instance.StartSummonItems(type, amount, costType, cost);
                         break;
                     }
-                    case EEquipmentType.Skill:
+                case EEquipmentType.Skill:
                     {
                         SummonManager.instance.StartSummonSkills(amount, costDia);
                         break;
                     }
-                }
             }
-            else
-            {
-                MessageUIManager.instance.ShowCenterMessage(CustomText.SetColor("재화", Color.red) + "가 부족합니다.");
-            }
-        });
-        autoSummon.onValueChanged.AddListener((onoff) => isAuto = onoff);
-        fastSummon.onValueChanged.AddListener((onoff) => isFast = onoff);
-        skipBackground.onClick.AddListener(() => { isSkip = true; });
+        }
+        else
+        {
+            MessageUIManager.instance.ShowCenterMessage(CustomText.SetColor("재화", Color.red) + "가 부족합니다.");
+        }
     }
 
     public override UIBase InitUI(UIBase parent)
@@ -99,15 +147,25 @@ public class UISummonList : UIPanel
         return this;
     }
 
-    public void ShowUI(EEquipmentType type, List<SummonItem> items, bool isFast, ECurrencyType currencyType)
+    public void SetEquipmentType(EEquipmentType type)
     {
         this.type = type;
-        amount = items.Count;
+    }
+
+    public void SetEquipmentAmount(int itemCount)
+    {
+        amount = itemCount;
+    }
+
+    public void ShowUI(EEquipmentType type, List<SummonItem> items, bool isFast, ECurrencyType currencyType)
+    {
+        SetEquipmentType(type);
+        SetEquipmentAmount(items.Count);
         this.isFast = isFast;
         this.currencyType = currencyType;
 
         fastSummon.isOn = isFast;
-        autoSummon.isOn = false;
+        autoSummon.isOn = IsAuto;
         gameObject.SetActive(true);
 
         SetForStartSummon();
@@ -132,13 +190,14 @@ public class UISummonList : UIPanel
         this.currencyType = currencyType;
 
         fastSummon.isOn = isFast;
-        autoSummon.isOn = false;
+        autoSummon.isOn = IsAuto;
+
         gameObject.SetActive(true);
 
         SetForStartSummon();
         SetTopBar(type);
         summonCurrency.text = CurrencyManager.instance.GetCurrencyStr(ECurrencyType.Dia);
-        
+
         CurrencyManager.instance.onCurrencyChanged += SetCurrency;
         StartCoroutine(ShowSummonEffect(skills, this.isFast));
     }
@@ -198,7 +257,8 @@ public class UISummonList : UIPanel
         foreach (var btn in exitBtns)
             btn.interactable = true;
     }
-    
+
+
     private IEnumerator ShowSummonEffect(List<SummonSkill> skills, bool isFast)
     {
         int i = 0;
@@ -225,7 +285,7 @@ public class UISummonList : UIPanel
                 yield return new WaitForSeconds(0.7f);
             else
                 yield return null;
-            
+
             ++i;
             passedTime = .0f;
         }
@@ -235,7 +295,6 @@ public class UISummonList : UIPanel
             var obj = itemPool.Get();
             obj.ShowUI(this, skills[i].skill);
             skills[i].isUpgrade += obj.Shake;
-
             ++i;
             yield return null;
         }
@@ -270,7 +329,7 @@ public class UISummonList : UIPanel
                 yield return new WaitForSeconds(0.7f);
             else
                 yield return null;
-            
+
             ++i;
             passedTime = .0f;
             yield return null;
@@ -304,7 +363,7 @@ public class UISummonList : UIPanel
         }
     }
 
-    public void ClearUI()
+    private void ClearUI()
     {
         while (itemPool.UsedCount > 0)
         {

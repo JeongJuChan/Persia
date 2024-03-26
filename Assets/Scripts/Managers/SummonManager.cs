@@ -150,7 +150,7 @@ public class SummonManager : MonoBehaviour
                 gacha = weaponGachaPerLevel[0];
                 break;
         }
-        
+
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < amount; ++i)
         {
@@ -221,9 +221,9 @@ public class SummonManager : MonoBehaviour
             yield return null;
         }
 
-        uiSummonPanel.EndSummon();
+        //uiSummonPanel.EndSummon();
 
-        yield return null;
+        //yield return null;
 
         foreach (var item in updateItems)
         {
@@ -247,6 +247,8 @@ public class SummonManager : MonoBehaviour
         CurrencyManager.instance.SaveCurrencies();
         PlayerManager.instance.status.InitBattleScore();
         MessageUIManager.instance.ShowPower(status.BattleScore, status.BattleScore - score);
+
+        CheckRepeat(uiSummonPanel);
 
         yield return null;
     }
@@ -339,9 +341,17 @@ public class SummonManager : MonoBehaviour
             SaveSummonLevel(EEquipmentType.Skill);
 
         CurrencyManager.instance.SaveCurrencies();
+        CheckRepeat(uiSummonPanel);
 
-        uiSummonPanel.EndSummon();
         yield return null;
+    }
+
+    private void CheckRepeat(UISummonPanel uiSummonPanel)
+    {
+        if (uiSummonPanel.IsAuto)
+            uiSummonPanel.TrySummonAgain();
+        else
+            uiSummonPanel.EndSummon();
     }
 
 

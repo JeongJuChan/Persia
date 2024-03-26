@@ -1,0 +1,21 @@
+타이틀,어빌리티 타입,등급,최솟값,최댓값,소모 재화
+공격력,ATK,SS,81,100,AbilityStone
+공격력,ATK,S,61,80,AbilityStone
+공격력,ATK,A,41,60,AbilityStone
+공격력,ATK,B,21,40,AbilityStone
+공격력,ATK,C,1,20,AbilityStone
+체력,HP,SS,89,111,AbilityStone
+체력,HP,S,67,88,AbilityStone
+체력,HP,A,45,66,AbilityStone
+체력,HP,B,23,44,AbilityStone
+체력,HP,C,11,22,AbilityStone
+치명타 데미지,CRIT_DMG,SS,41,50,AbilityStone
+치명타 데미지,CRIT_DMG,S,31,40,AbilityStone
+치명타 데미지,CRIT_DMG,A,21,30,AbilityStone
+치명타 데미지,CRIT_DMG,B,11,20,AbilityStone
+치명타 데미지,CRIT_DMG,C,1,10,AbilityStone
+피해량 증가,SKILL_DMG,SS,21,25,AbilityStone
+피해량 증가,SKILL_DMG,S,16,20,AbilityStone
+피해량 증가,SKILL_DMG,A,11,15,AbilityStone
+피해량 증가,SKILL_DMG,B,6,10,AbilityStone
+피해량 증가,SKILL_DMG,C,1,5,AbilityStone

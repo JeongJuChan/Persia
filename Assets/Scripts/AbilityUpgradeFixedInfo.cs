@@ -1,26 +1,45 @@
 ﻿using Defines;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-// TODO : 점검
 [Serializable]
-[CreateAssetMenu(menuName = "SO/AbilityUpgradeFixedInfo", fileName = "AbilityUpgradeFixedInfo")]
-public class AbilityUpgradeFixedInfo : ScriptableObject
+public class AbilityUpgradeFixedInfo
 {
     public string title;
 
+    [field: SerializeField] public List<AbilityRangePerRank> abilityRangePerRanks { get; private set; } = new List<AbilityRangePerRank>();
+
     // 업글 관련
     public EStatusType statusType;
-    public RankUpgradeRange[] rankUpgradeRangeArray = new RankUpgradeRange[Enum.GetValues(typeof(Rank)).Length - 1];
 
     // 비용 관련
     public ECurrencyType currencyType;
+
+
+    public AbilityUpgradeFixedInfo(string title, Dictionary<Rank, (int, int)> abilityDict, EStatusType statusType, ECurrencyType currencyType)
+    {
+        this.title = title;
+
+        foreach (var pair in abilityDict)
+            abilityRangePerRanks.Add(new AbilityRangePerRank(pair.Key, pair.Value));
+
+        this.statusType = statusType;
+        this.currencyType = currencyType;
+    }
 }
 
 [Serializable]
-public struct RankUpgradeRange
+public struct AbilityRangePerRank
 {
+    public AbilityRangePerRank(Rank rank, (int, int) range)
+    {
+        this.rank = rank;
+        minRange = range.Item1;
+        maxRange = range.Item2;
+    }
+
     public Rank rank;
-    public int upgradeMinInt;
-    public int upgradeMaxInt;
+    public int minRange;
+    public int maxRange;
 }

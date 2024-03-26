@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Keiwando.BigInteger;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Utils;
 
@@ -14,8 +13,9 @@ public class UISummonPanel : UIPanel
     [SerializeField] private Toggle[] countToggles;
     private int summonAmount;
     public bool IsEndShowSummon => summonList.isEnd;
+    public bool IsAuto => summonList.IsAuto;
 
-    [Header("무기 관련 UI")] 
+    [Header("무기 관련 UI")]
     [SerializeField] private Button weaponSummonBtn;
     [SerializeField] private Button weaponAdSummonBtn;
     [SerializeField] private Button seeWeaponSummonPercent;
@@ -50,7 +50,7 @@ public class UISummonPanel : UIPanel
     [SerializeField] private Slider armorSummonSlider;
     [SerializeField] private Button armorSummonReward;
     [SerializeField] private GameObject armorRewardEffect;
-    
+
     [Header("스킬 관련 UI")]
     [SerializeField] private Button skillSummonBtn;
     [SerializeField] private Button skillAdSummonBtn;
@@ -64,7 +64,7 @@ public class UISummonPanel : UIPanel
     [SerializeField] private Slider skillSummonSlider;
     [SerializeField] private Button skillSummonReward;
     [SerializeField] private GameObject skillRewardEffect;
-    
+
     [Header("소환 리스트 UI")]
     [SerializeField] private UISummonList summonList;
 
@@ -72,7 +72,7 @@ public class UISummonPanel : UIPanel
     [SerializeField] private Transform weaponSummonQuestRoot;
     [SerializeField] private Transform armorSummonQuestRoot;
     [SerializeField] private Transform skillSummonQuestRoot;
-    
+
     protected void Awake()
     {
         summonAmount = preSummonAmount[0];
@@ -81,13 +81,13 @@ public class UISummonPanel : UIPanel
     public override void ShowUI()
     {
         base.ShowUI();
-        
+
         weaponDiamondCostUI.sprite = CurrencyManager.instance.GetIcon(ECurrencyType.Dia);
         armorDiamondCostUI.sprite = CurrencyManager.instance.GetIcon(ECurrencyType.Dia);
         skillDiamondCostUI.sprite = CurrencyManager.instance.GetIcon(ECurrencyType.Dia);
         weaponTicketCostUI.sprite = CurrencyManager.instance.GetIcon(ECurrencyType.WeaponSummonTicket);
         armorTicketCostUI.sprite = CurrencyManager.instance.GetIcon(ECurrencyType.ArmorSummonTicket);
-        
+
         UpdateSummonCostUI(EEquipmentType.Weapon, summonAmount);
         UpdateSummonCostUI(EEquipmentType.Armor, summonAmount);
         UpdateSummonCostUI(EEquipmentType.Skill, summonAmount);
@@ -98,7 +98,7 @@ public class UISummonPanel : UIPanel
         UpdateWeaponCounter(SummonManager.instance.WeaponSummonCount, SummonManager.instance.SummonCountPerLevel[SummonManager.instance.WeaponSummonLevel]);
         UpdateArmorCounter(SummonManager.instance.ArmorSummonCount, SummonManager.instance.SummonCountPerLevel[SummonManager.instance.ArmorSummonLevel]);
         UpdateSkillCounter(SummonManager.instance.SkillSummonCount, 400);
-        
+
         SummonManager.instance.onWeaponSummonLevelUP += UpdateWeaponLevel;
         SummonManager.instance.onArmorSummonLevelUP += UpdateArmorLevel;
         SummonManager.instance.onSkillSummonLevelUP += UpdateSkillLevel;
@@ -136,21 +136,19 @@ public class UISummonPanel : UIPanel
 
         // 무기 관련 버튼 초기화
         weaponSummonBtn.onClick.AddListener(() => OnSummonEquipment(EEquipmentType.Weapon, summonAmount));
-        // weaponAdSummonBtn.onClick.AddListener(() => OnSummonEquipment(EEquipmentType.Weapon, summonAmount));
         seeWeaponSummonPercent.onClick.AddListener(() => OnSummonPercentage(EEquipmentType.Weapon));
-        weaponSummonReward.onClick.AddListener(() => TryGetSummonReward(EEquipmentType.Weapon, SummonManager.instance.WeaponSummonLevel) );
-        
+        weaponSummonReward.onClick.AddListener(() => TryGetSummonReward(EEquipmentType.Weapon, SummonManager.instance.WeaponSummonLevel));
+
         // 방어구 관련 버튼 초기화
         armorSummonBtn.onClick.AddListener(() => OnSummonEquipment(EEquipmentType.Armor, summonAmount));
-        // armorAdSummonBtn.onClick.AddListener(() => OnSummonEquipment(EEquipmentType.Armor, summonAmount));
         seeArmorSummonPercent.onClick.AddListener(() => OnSummonPercentage(EEquipmentType.Armor));
         armorSummonReward.onClick.AddListener(() => TryGetSummonReward(EEquipmentType.Armor, SummonManager.instance.ArmorSummonLevel));
-        
+
         // 스킬 관련 버튼 초기화
         skillSummonBtn.onClick.AddListener(() => OnSummonSkill(summonAmount));
-        // skillAdSummonBtn.onClick.AddListener(() => OnSummonSkill(summonAmount));
-        seeSkillSummonPercent.onClick.AddListener(() => OnSummonPercentage(EEquipmentType.Skill));
-        skillSummonReward.onClick.AddListener(() => TryGetSummonReward(EEquipmentType.Skill, SummonManager.instance.SkillSummonLevel));
+        // weaponAdSummonBtn.onClick.AddListener(() => OnSummonEquipment(EEquipmentType.Weapon, summonAmount));
+        seeWeaponSummonPercent.onClick.AddListener(() => OnSummonPercentage(EEquipmentType.Weapon));
+        weaponSummonReward.onClick.AddListener(() => TryGetSummonReward(EEquipmentType.Weapon, SummonManager.instance.WeaponSummonLevel));
     }
 
     private void TryGetSummonReward(EEquipmentType type, int summonLevel)
@@ -175,6 +173,10 @@ public class UISummonPanel : UIPanel
         }
     }
 
+    public void TrySummonAgain()
+    {
+        summonList.TrySummon();
+    }
 
     private void CheckCurrency(ECurrencyType type, string amount)
     {
@@ -185,7 +187,7 @@ public class UISummonPanel : UIPanel
             UpdateSummonCostUI(EEquipmentType.Skill, summonAmount);
         }
     }
-    
+
     private void OnSummonPercentage(EEquipmentType type)
     {
         // TODO show summon percentage
@@ -220,7 +222,7 @@ public class UISummonPanel : UIPanel
                 // weaponSummonTicketCost = costTicket;
 
                 // weaponAdCost.text = $"x{amount}";
-                
+
 
                 //weaponSummonBtn.interactable = onoff;
                 break;
@@ -242,7 +244,7 @@ public class UISummonPanel : UIPanel
 
                 // armorSummonDiamondCost = costDia;
                 // armorSummonTicketCost = costTicket;
-                
+
                 // armorAdCost.text = $"x{amount}";
 
                 //armorSummonBtn.interactable = onoff;
@@ -251,7 +253,7 @@ public class UISummonPanel : UIPanel
                 skillDiamondCostUI.gameObject.SetActive(true);
                 skillDiamondCost.text = $"x{costDia.ToString()}";
                 // skillSummonDiamondCost = costDia;
-                
+
                 // skillAdCost.text = $"x{amount}";
 
                 //skillSummonBtn.interactable = onoff;
@@ -274,7 +276,7 @@ public class UISummonPanel : UIPanel
         }
         else
         {
-            MessageUIManager.instance.ShowCenterMessage(CustomText.SetColor("재화", Color.magenta)+"가 부족합니다.");
+            MessageUIManager.instance.ShowCenterMessage(CustomText.SetColor("재화", Color.magenta) + "가 부족합니다.");
         }
         // switch (type)
         // {
@@ -317,7 +319,7 @@ public class UISummonPanel : UIPanel
         //     CurrencyManager.instance.SubtractCurrency(ECurrencyType.ArmorSummonTicket, armorSummonTicketCost);
         //     CurrencyManager.instance.SubtractCurrency(ECurrencyType.Dia, armorSummonDiamondCost);
         // }
-        
+
     }
 
     public void OnSummonSkill(int amount)
@@ -328,11 +330,11 @@ public class UISummonPanel : UIPanel
         }
         else
         {
-            MessageUIManager.instance.ShowCenterMessage(CustomText.SetColor("재화", Color.magenta)+"가 부족합니다.");
+            MessageUIManager.instance.ShowCenterMessage(CustomText.SetColor("재화", Color.magenta) + "가 부족합니다.");
         }
         // if (SummonManager.instance.SummonSkills(amount, out List<BaseSkillData> skillList))
-            // summonList.ShowUI(EEquipmentType.Skill, skillList, false);
-        
+        // summonList.ShowUI(EEquipmentType.Skill, skillList, false);
+
         // CurrencyManager.instance.SubtractCurrency(ECurrencyType.Dia, skillSummonDiamondCost);
     }
 
@@ -350,7 +352,7 @@ public class UISummonPanel : UIPanel
 
         CurrencyManager.instance.onCurrencyChanged -= CheckCurrency;
     }
-    
+
     private void UpdateWeaponLevel(int level)
     {
         weaponSummonLevel.text = "Lv." + level;
@@ -375,7 +377,7 @@ public class UISummonPanel : UIPanel
     {
         weaponSummonCounter.text = $"{current} / {max}";
         weaponSummonSlider.maxValue = max;
-        weaponSummonSlider.value = current; 
+        weaponSummonSlider.value = current;
     }
 
     private void UpdateArmorCounter(int current, int max)
@@ -413,7 +415,7 @@ public class UISummonPanel : UIPanel
                 break;
         }
         questGuide.gameObject.SetActive(true);
-        QuestManager.instance.currentQuest.onComplete += x=>questGuide.gameObject.SetActive(false);
+        QuestManager.instance.currentQuest.onComplete += x => questGuide.gameObject.SetActive(false);
     }
 
     public void ShowSummonList(EEquipmentType type, List<SummonItem> equipList, ECurrencyType currencyType)

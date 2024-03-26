@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Defines;
 using Keiwando.BigInteger;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UpgradeManager : MonoBehaviour
 {
@@ -45,10 +47,10 @@ public class UpgradeManager : MonoBehaviour
 
     [field: SerializeField] public AwakenUpgradeInfo[] awakenUpgradeInfo { get; protected set; }
 
-    [Header("어빌리티")]
-    [SerializeField] private AbilityCalculator abilityCalculator;
-    [field: SerializeField] public AbilityUpgradeFixedInfo[] abilityUpgradeFixedInfo { get; protected set; }
-    [field: SerializeField] public AbilityData abilitydata { get; private set; }
+    [field: SerializeField] public AbilityCalculator abilityCalculator { get; private set; } = new AbilityCalculator();
+    [field: SerializeField] public List<AbilityUpgradeFixedInfo> abilityUpgradeFixedInfo { get; protected set; } = new List<AbilityUpgradeFixedInfo>();
+    
+    [field: SerializeField] public AbilityData abilitydata { get; private set; } = new AbilityData();
     private AbilityUpgradeInfo preUpgradeInfo = new AbilityUpgradeInfo();
 
     // [field: SerializeField] public SpecialityUpgradeInfo[] specialityUpgradeInfo { get; protected set; }
@@ -170,11 +172,9 @@ public class UpgradeManager : MonoBehaviour
 
         preUpgradeInfo.SetType(info.statusType);
         preUpgradeInfo.SetUpgradeInfo(info.rank, info.percent);
-
-        AbilityUpgradeFixedInfo fixedInfo = abilityCalculator.GetRandomFixedInfo(abilityUpgradeFixedInfo);
-        int percent = abilityCalculator.GetRandomPercent(fixedInfo.rankUpgradeRangeArray, out Rank rank);
-
         
+        AbilityUpgradeFixedInfo fixedInfo = abilityCalculator.GetRandomFixedInfo(abilityUpgradeFixedInfo);
+        int percent = abilityCalculator.GetRandomPercent(fixedInfo.abilityRangePerRanks, out Rank rank);
 
         info.SetType(fixedInfo.statusType);
         info.SetTitle(fixedInfo.title);
@@ -232,6 +232,8 @@ public class UpgradeManager : MonoBehaviour
         {
             upgradeInfo.Init();
         }
+
+        
     }
 
     public void LoadUpgradeInfo()
@@ -466,3 +468,189 @@ public class AbilityUpgradeInfo
         return true;
     }
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(UpgradeManager))]
+public class UpgradeManagerEditor : Editor
+{
+    private TextAsset abilityProbability;
+    private TextAsset abilityCost;
+    private TextAsset abilityEffect;
+
+    private UpgradeManager upgrade;
+
+    private void OnEnable()
+    {
+        upgrade = (UpgradeManager)target;
+    }
+
+
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+
+        abilityProbability = EditorGUILayout.ObjectField("어빌리티_확률", abilityProbability, typeof(TextAsset), true) as TextAsset;
+        if (GUILayout.Button("Load From CSV File"))
+        {
+            LoadAbilityRank(abilityProbability);
+        }
+        abilityCost = EditorGUILayout.ObjectField("어빌리티_소모량", abilityCost, typeof(TextAsset), true) as TextAsset;
+        if (GUILayout.Button("Load From CSV File"))
+        {
+            LoadAbilityCost(abilityCost);
+        }
+        abilityEffect = EditorGUILayout.ObjectField("어빌리티_효과", abilityEffect, typeof(TextAsset), true) as TextAsset;
+        if (GUILayout.Button("Load From CSV File"))
+        {
+            LoadAbilityEffect(abilityEffect);
+        }
+    }
+
+    private void LoadAbilityRank(TextAsset textAsset)
+    {
+        if (textAsset == null)
+        {
+            Debug.LogError("필드에 어빌리티_확률 CSV 파일을 넣어주십시오");
+            return;
+        }
+
+        string[] rows = textAsset.text.Split('\n');
+
+        Debug.Log(rows[0]);
+
+        int length = rows.Length - 1;
+        int totalPercent = 0;
+
+        upgrade.abilityCalculator.SetPercentageLength(length - 1);
+
+        for (int i = 1; i < length; i++)
+        {
+            string[] elements = rows[i].Split(',');
+
+            Rank rank = GetEnumByComparingName<Rank>(elements[0]);
+
+            int.TryParse(elements[1], out int percent);
+            percent = percent == -1 ? 0 : percent;
+            totalPercent += percent;
+
+            PercentagePerRank percentPerRank = new PercentagePerRank(rank, percent);
+            upgrade.abilityCalculator.percentagePerRankArray[i - 1] = percentPerRank;
+        }
+
+        if (totalPercent != 100)
+        {
+            Debug.LogError("어빌리티_확률 CSV 파일 값이 잘못되었습니다.");
+            return;
+        }
+    }
+
+    
+
+    private void LoadAbilityCost(TextAsset textAsset)
+    {
+        if (textAsset == null)
+        {
+            Debug.LogError("필드에 어빌리티_소모량 CSV 파일을 넣어주십시오");
+            return;
+        }
+
+        string[] rows = textAsset.text.Split('\n');
+
+        Debug.Log(rows[0]);
+
+        int length = rows.Length - 1;
+
+        upgrade.abilitydata.SetFixedCostInfoLength(length);
+
+        for (int i = 1; i < length; i++)
+        {
+            string[] elements = rows[i].Split(',');
+
+            int.TryParse(elements[0], out int level);
+
+            int.TryParse(elements[1], out int cost);
+
+            AbilityFixedCostInfo abilityFixedCostInfo = new AbilityFixedCostInfo(level, cost);
+            upgrade.abilitydata.fixedCostInfos[i - 1] = abilityFixedCostInfo;
+
+            if (level == -1 || cost == -1)
+            {
+                Debug.LogError("어빌리티_소모량 CSV 파일 값이 잘못되었습니다.");
+                return;
+            }
+        }
+    }
+
+    private void LoadAbilityEffect(TextAsset textAsset)
+    {
+        if (textAsset == null)
+        {
+            Debug.LogError("필드에 어빌리티_효과 CSV 파일을 넣어주십시오");
+            return;
+        }
+
+        string[] rows = textAsset.text.Split('\n');
+
+        Debug.Log(rows[0]);
+
+        int length = rows.Length - 1;
+
+        Dictionary<string, Dictionary<Rank, (int, int)>> abilityEffectDict = 
+            new Dictionary<string, Dictionary<Rank, (int, int)>>();
+
+        // None을 포함하기 때문에 -1
+        int rankLength = Enum.GetValues(typeof(Rank)).Length - 1;
+
+        for (int i = 1; i < length; i++)
+        {
+            string[] elements = rows[i].Split(',');
+            //ATK
+            //HP
+            //CRIT_DMG
+            //SKILL_DMG
+            string title = elements[0];
+            if (!abilityEffectDict.ContainsKey(title))
+                abilityEffectDict.Add(title, new Dictionary<Rank, (int, int)>());
+
+            Rank rank = GetEnumByComparingName<Rank>(elements[2]);
+            if (!abilityEffectDict[title].ContainsKey(rank))
+            {
+                int.TryParse(elements[3], out int min);
+                int.TryParse(elements[4], out int max);
+
+                if (min == -1 || max == -1)
+                {
+                    Debug.LogError("어빌리티_효과 CSV 파일의 최댓값 또는 최솟값이 잘못되었습니다.");
+                    return;
+                }
+
+                abilityEffectDict[title].Add(rank, (min, max));
+            }
+
+            if (abilityEffectDict[title].Keys.Count == rankLength)
+            {
+                EStatusType statusType = GetEnumByComparingName<EStatusType>(elements[1]);
+                ECurrencyType currencyType = GetEnumByComparingName<ECurrencyType>(elements[5]);
+
+                AbilityUpgradeFixedInfo abilityUpgradeFixedInfo = 
+                    new AbilityUpgradeFixedInfo(title, abilityEffectDict[title], statusType, currencyType);
+
+                upgrade.abilityUpgradeFixedInfo.Add(abilityUpgradeFixedInfo);
+            }
+        }
+    }
+
+    private T GetEnumByComparingName<T>(string element)
+    {
+        foreach (T comparativeValue in Enum.GetValues(typeof(T)))
+        {
+            if (string.Compare(element, comparativeValue.ToString()) == 0)
+            {
+                return comparativeValue;
+            }
+        }
+
+        return default;
+    }
+}
+#endif

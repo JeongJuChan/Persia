@@ -76,39 +76,8 @@ MonoBehaviour:
     info: {fileID: 11400000, guid: 90fb1df67101d074fb5a8d35a883f4ca, type: 2}
   - level: 0
     info: {fileID: 11400000, guid: e094b6368764b474db86e377a0af74b6, type: 2}
-  abilityCalculator:
-    rankSO: {fileID: 11400000, guid: 17e99ec0bb753a441b5f937104683ab7, type: 2}
-  <abilityUpgradeFixedInfo>k__BackingField:
-  - {fileID: 11400000, guid: 476f650c17fe7f944aaba5440c2e643d, type: 2}
-  - {fileID: 11400000, guid: f16dba473a6fbb54cadb7bfdfe3b539c, type: 2}
-  - {fileID: 11400000, guid: 639be0f5b29855f458fd8090ce343a23, type: 2}
-  - {fileID: 11400000, guid: bd1f2571e3e35c34d8f8643648109e43, type: 2}
+  <abilityPercentData>k__BackingField:
+    percentagePerRankArray: []
+  <abilityUpgradeFixedInfo>k__BackingField: []
   <abilitydata>k__BackingField:
-    fixedCostInfos:
-    - {fileID: 11400000, guid: ee2b8e2ef4cd6e247b892622297ed028, type: 2}
-    - {fileID: 11400000, guid: acb6e8c49a06be840acef3cda7ea84c3, type: 2}
-    - {fileID: 11400000, guid: 33c7a39729529b04f9edbbb6f7e07ee3, type: 2}
-    - {fileID: 11400000, guid: ac818bbbfce4fa240be711891adee2b9, type: 2}
-    - {fileID: 11400000, guid: 84c8ea104cd1fed4cbd3fa5fe463afd7, type: 2}
-    - {fileID: 11400000, guid: 9374b4a02d7d45c4390abcdbcdf65c60, type: 2}
-    - {fileID: 11400000, guid: 6b2e53ae08281d24d949cc401272c998, type: 2}
-    - {fileID: 11400000, guid: 0e55e84cdb6bb44488385e02d124c715, type: 2}
-    - {fileID: 11400000, guid: 2b0487de2d2e85149af6f8a6600dd6de, type: 2}
-    - {fileID: 11400000, guid: e7fce0d41b3e5b942b177fd3e2adb99f, type: 2}
-    - {fileID: 11400000, guid: 9ad3687b3bf6bba47bafc00b19668582, type: 2}
-    - {fileID: 11400000, guid: 2ce139c0d3f992546ab5087d81e08bba, type: 2}
-    - {fileID: 11400000, guid: 0528adfa22a031440b37db43359b27d1, type: 2}
-    - {fileID: 11400000, guid: 15f9468a17f4db54ba6b645669c38f24, type: 2}
-    - {fileID: 11400000, guid: dfe7fe42410af6947be13a8eaf45cf5e, type: 2}
-    - {fileID: 11400000, guid: 5c5e439552d133d469b8a5cd21d1c720, type: 2}
-    - {fileID: 11400000, guid: fda1f8394eb82dd4abb0c93671d42fd0, type: 2}
-    - {fileID: 11400000, guid: 6a0ad62b2ba062f42961ebe71e00e80f, type: 2}
-    - {fileID: 11400000, guid: cdb1d6b0a27ab564b913c4256a9ddd9c, type: 2}
-    - {fileID: 11400000, guid: 2cb1467386864f441bc88dc6e925b36a, type: 2}
-    - {fileID: 11400000, guid: 9b577d61a558fd240aaae244d3bfbc7e, type: 2}
-    - {fileID: 11400000, guid: 792d044aa5d98ca4190d6be2929cd2ce, type: 2}
-    - {fileID: 11400000, guid: a40d4691da0a48f4ca20c1e55a8361c6, type: 2}
-    - {fileID: 11400000, guid: 9de3d309e217d074f929f775bda3b7d9, type: 2}
-    - {fileID: 11400000, guid: 56cbfdaedeab2904198d0d0fb9fa4fb0, type: 2}
-    - {fileID: 11400000, guid: 5db5209fb397642478dcd13caf733866, type: 2}
-    - {fileID: 11400000, guid: 6d2c97fd1a0ee6241b2da2c65df46d76, type: 2}
+    <fixedCostInfos>k__BackingField: []

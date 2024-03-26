@@ -6,7 +6,12 @@ using UnityEngine;
 public class AbilityData
 {
     public List<AbilityUpgradeInfo> abilityUpgradeInfos { get; private set; } = new List<AbilityUpgradeInfo>();
-    [SerializeField] private AbilityFixedCostInfo[] fixedCostInfos;
+    [field: SerializeField] public AbilityFixedCostInfo[] fixedCostInfos { get; private set; }
+
+    public void SetFixedCostInfoLength(int length)
+    {
+        fixedCostInfos = new AbilityFixedCostInfo[length];
+    }
 
     public void Init()
     {
