@@ -1,0 +1,301 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1342502533105723402
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2381867766657853782}
+  - component: {fileID: 7371427338871844874}
+  m_Layer: 0
+  m_Name: UpgradeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2381867766657853782
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1342502533105723402}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7371427338871844874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1342502533105723402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52e9f7b223dde470a88344a824926d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <statUpgradeInfo>k__BackingField:
+  - level: 0
+    info: {fileID: 11400000, guid: e3ec893c18266440ba40747750c31f5b, type: 2}
+  - level: 0
+    info: {fileID: 11400000, guid: bfdcf254b2d5c41e8a5bfaff5c06d72b, type: 2}
+  - level: 0
+    info: {fileID: 11400000, guid: 8af55eb55d5fd461ca35bf24b79664f8, type: 2}
+  - level: 0
+    info: {fileID: 11400000, guid: 2ec81611258e34891b72c467cbadfbf7, type: 2}
+  - level: 0
+    info: {fileID: 11400000, guid: 46c97a36243d141daa7cf425a0ebf91b, type: 2}
+  - level: 0
+    info: {fileID: 11400000, guid: 243e13d1b152c4012ac26635da78a295, type: 2}
+  - level: 0
+    info: {fileID: 11400000, guid: 1743f81d85d6e40efb3577a252f57deb, type: 2}
+  - level: 0
+    info: {fileID: 11400000, guid: 92161077fa3a94748956a999be31fac6, type: 2}
+  - level: 0
+    info: {fileID: 11400000, guid: 60946ce020b23405a8e46af92d7a02a1, type: 2}
+  <awakenUpgradeInfo>k__BackingField:
+  - level: 0
+    info: {fileID: 11400000, guid: e7f1acb41db67435c97ac04417920724, type: 2}
+  - level: 0
+    info: {fileID: 11400000, guid: c406519339ad3514fa43a58446c4b46f, type: 2}
+  - level: 0
+    info: {fileID: 11400000, guid: 40fb69f14cf9e1149af7b24dbfb25f5b, type: 2}
+  - level: 0
+    info: {fileID: 11400000, guid: eabc39a6524ec0240aa9238e93ccc3aa, type: 2}
+  - level: 0
+    info: {fileID: 11400000, guid: 90fb1df67101d074fb5a8d35a883f4ca, type: 2}
+  - level: 0
+    info: {fileID: 11400000, guid: e094b6368764b474db86e377a0af74b6, type: 2}
+  <abilityCalculator>k__BackingField:
+    <percentagePerRankArray>k__BackingField:
+    - rank: 0
+      percentage: 1
+    - rank: 1
+      percentage: 9
+    - rank: 2
+      percentage: 20
+    - rank: 3
+      percentage: 30
+    - rank: 4
+      percentage: 40
+  <abilityUpgradeFixedInfo>k__BackingField:
+  - title: "\uACF5\uACA9\uB825"
+    <abilityRangePerRanks>k__BackingField:
+    - rank: 0
+      minRange: 81
+      maxRange: 100
+    - rank: 1
+      minRange: 61
+      maxRange: 80
+    - rank: 2
+      minRange: 41
+      maxRange: 60
+    - rank: 3
+      minRange: 21
+      maxRange: 40
+    - rank: 4
+      minRange: 1
+      maxRange: 20
+    statusType: 0
+    currencyType: 4
+  - title: "\uCCB4\uB825"
+    <abilityRangePerRanks>k__BackingField:
+    - rank: 0
+      minRange: 89
+      maxRange: 111
+    - rank: 1
+      minRange: 67
+      maxRange: 88
+    - rank: 2
+      minRange: 45
+      maxRange: 66
+    - rank: 3
+      minRange: 23
+      maxRange: 44
+    - rank: 4
+      minRange: 11
+      maxRange: 22
+    statusType: 1
+    currencyType: 4
+  - title: "\uCE58\uBA85\uD0C0 \uB370\uBBF8\uC9C0"
+    <abilityRangePerRanks>k__BackingField:
+    - rank: 0
+      minRange: 41
+      maxRange: 50
+    - rank: 1
+      minRange: 31
+      maxRange: 40
+    - rank: 2
+      minRange: 21
+      maxRange: 30
+    - rank: 3
+      minRange: 11
+      maxRange: 20
+    - rank: 4
+      minRange: 1
+      maxRange: 10
+    statusType: 6
+    currencyType: 4
+  - title: "\uD53C\uD574\uB7C9 \uC99D\uAC00"
+    <abilityRangePerRanks>k__BackingField:
+    - rank: 0
+      minRange: 21
+      maxRange: 25
+    - rank: 1
+      minRange: 16
+      maxRange: 20
+    - rank: 2
+      minRange: 11
+      maxRange: 15
+    - rank: 3
+      minRange: 6
+      maxRange: 10
+    - rank: 4
+      minRange: 1
+      maxRange: 5
+    statusType: 9
+    currencyType: 4
+  - title: "\uACF5\uACA9\uB825"
+    <abilityRangePerRanks>k__BackingField:
+    - rank: 0
+      minRange: 81
+      maxRange: 100
+    - rank: 1
+      minRange: 61
+      maxRange: 80
+    - rank: 2
+      minRange: 41
+      maxRange: 60
+    - rank: 3
+      minRange: 21
+      maxRange: 40
+    - rank: 4
+      minRange: 1
+      maxRange: 20
+    statusType: 0
+    currencyType: 4
+  - title: "\uCCB4\uB825"
+    <abilityRangePerRanks>k__BackingField:
+    - rank: 0
+      minRange: 89
+      maxRange: 111
+    - rank: 1
+      minRange: 67
+      maxRange: 88
+    - rank: 2
+      minRange: 45
+      maxRange: 66
+    - rank: 3
+      minRange: 23
+      maxRange: 44
+    - rank: 4
+      minRange: 11
+      maxRange: 22
+    statusType: 1
+    currencyType: 4
+  - title: "\uCE58\uBA85\uD0C0 \uB370\uBBF8\uC9C0"
+    <abilityRangePerRanks>k__BackingField:
+    - rank: 0
+      minRange: 41
+      maxRange: 50
+    - rank: 1
+      minRange: 31
+      maxRange: 40
+    - rank: 2
+      minRange: 21
+      maxRange: 30
+    - rank: 3
+      minRange: 11
+      maxRange: 20
+    - rank: 4
+      minRange: 1
+      maxRange: 10
+    statusType: 6
+    currencyType: 4
+  - title: "\uD53C\uD574\uB7C9 \uC99D\uAC00"
+    <abilityRangePerRanks>k__BackingField:
+    - rank: 0
+      minRange: 21
+      maxRange: 25
+    - rank: 1
+      minRange: 16
+      maxRange: 20
+    - rank: 2
+      minRange: 11
+      maxRange: 15
+    - rank: 3
+      minRange: 6
+      maxRange: 10
+    - rank: 4
+      minRange: 1
+      maxRange: 5
+    statusType: 9
+    currencyType: 4
+  <abilitydata>k__BackingField:
+    <fixedCostInfos>k__BackingField:
+    - level: 1
+      cost: 50
+    - level: 2
+      cost: 70
+    - level: 3
+      cost: 90
+    - level: 4
+      cost: 110
+    - level: 5
+      cost: 130
+    - level: 6
+      cost: 150
+    - level: 7
+      cost: 180
+    - level: 8
+      cost: 210
+    - level: 9
+      cost: 250
+    - level: 10
+      cost: 300
+    - level: 11
+      cost: 380
+    - level: 12
+      cost: 450
+    - level: 13
+      cost: 520
+    - level: 14
+      cost: 600
+    - level: 15
+      cost: 670
+    - level: 16
+      cost: 750
+    - level: 17
+      cost: 850
+    - level: 18
+      cost: 1000
+    - level: 19
+      cost: 1150
+    - level: 20
+      cost: 1250
+    - level: 21
+      cost: 1350
+    - level: 22
+      cost: 1500
+    - level: 23
+      cost: 1650
+    - level: 24
+      cost: 1800
+    - level: 25
+      cost: 1950
+    - level: 26
+      cost: 2100
+    - level: 27
+      cost: 2250
+    - level: 0
+      cost: 0
