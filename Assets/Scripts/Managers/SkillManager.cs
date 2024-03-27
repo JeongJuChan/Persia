@@ -269,7 +269,7 @@ public class SkillManager : MonoBehaviour
             switch (active.attackType)
             {
                 case ESkillAttackType.Single:
-                    return CallSkillSingle(active.skillName, out direction);
+                    return CallSkillSingle(active.skillName, out direction, active.isFollowing);
                 case ESkillAttackType.Multiple:
                     return CallSkillMultiple(active.skillName, out direction);
             }
@@ -280,7 +280,7 @@ public class SkillManager : MonoBehaviour
     }
 
     // Search Target and Start Skill
-    private bool CallSkillSingle(string skillName, out Vector3 direction)
+    private bool CallSkillSingle(string skillName, out Vector3 direction, bool isFollowing)
     {
         if (!PlayerManager.instance.player.health.SubstractMP(animSkillData[skillName].ManaConsume))
         {
@@ -342,14 +342,20 @@ public class SkillManager : MonoBehaviour
         timer[skillName] = animSkillData[skillName].coolTime;
 
         var skill = GetSkillSystem(skillName);
-
-        skill.transform.position = center;
-        // Debug.Log($"skill direction {direction.x}.{direction.y}.{direction.z}");
-        var dir = GetLeftOrRight(direction);
-        var local = skill.transform.localScale;
-        // Debug.Log($"skill dir {dir.x}.{dir.y}.{dir.z}");
-        skill.transform.localScale = new Vector3(Mathf.Abs(local.x) * dir.x, local.y * dir.y, local.z * dir.z);
-
+        if (skill.activeSkillData.isFollowing)
+        {
+            // TODO : 회전 로직 구현
+        }
+        else
+        {
+            skill.transform.position = center;
+            // Debug.Log($"skill direction {direction.x}.{direction.y}.{direction.z}");
+            var dir = GetLeftOrRight(direction);
+            var local = skill.transform.localScale;
+            // Debug.Log($"skill dir {dir.x}.{dir.y}.{dir.z}");
+            skill.transform.localScale = new Vector3(Mathf.Abs(local.x) * dir.x, local.y * dir.y, local.z * dir.z);
+        }
+        
         skill.StartSkill();
     }
 

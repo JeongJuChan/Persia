@@ -12,6 +12,7 @@ public class ActiveSkillFixedInfo : FixedInfo
     public EFsmState animType;
     public string animParameter;
     public float skillAnimTime;
+    public AnimationClip animation;
     
     [Header("Attack")]
     public ESkillAttackType attackType;

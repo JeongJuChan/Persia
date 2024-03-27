@@ -168,6 +168,7 @@ public class SkillSystem : AttackSystem
 
             if (!isEnd && !isMaster)
             {
+                // TODO : 분리가 필요할 수 있음
                 if (isTargeting)
                 {
                     if (targetTransform != null)

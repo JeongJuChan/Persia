@@ -52,6 +52,7 @@ MonoBehaviour:
   - {fileID: 8371061536800332358, guid: 465315363c9124313b46ee05c3599016, type: 3}
   - {fileID: 8371061536800332358, guid: 236e1c8d44c974534bb974a4d28fa5d3, type: 3}
   - {fileID: 8371061536800332358, guid: fe72e901841b84dc7ab682381fd92c7c, type: 3}
+  - {fileID: 8371061536800332358, guid: 044647597da47ec46b6229f0bd7a0a05, type: 3}
   activeSkillFixedInfos:
   - {fileID: 11400000, guid: 6fd841f8e0dca4123832f55dd75fa70f, type: 2}
   - {fileID: 11400000, guid: 3cee0ec918b834b3bbbf3b640fca5c14, type: 2}
@@ -60,6 +61,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 58ce0c706f1b549a196d0e4e7712bfba, type: 2}
   - {fileID: 11400000, guid: 935a42515f34e46879491e4b7b98cb1a, type: 2}
   - {fileID: 11400000, guid: 99ea2100b1f3244c69df030c767d326d, type: 2}
+  - {fileID: 11400000, guid: aed41866f05ce064eb82435d00d5fe6b, type: 2}
   buffSkillFixedInfos:
   - {fileID: 11400000, guid: ffef70993311148dc83594b45a17ec8c, type: 2}
   - {fileID: 11400000, guid: 80fc42f6723bb466599e2507699ee41d, type: 2}
@@ -123,6 +125,27 @@ MonoBehaviour:
       skillDamageBuff: 0
   playerSpecialActiveSkillInfo: {fileID: 11400000, guid: bf5d67d37b84441859233f7ddb29e288, type: 2}
   playerActiveSkillDatas:
+  - skillName: "\uCC9C\uAC80 \uBC1C\uD0A4\uB9AC"
+    rarity: 3
+    description: "\uC804\uBC29 \uB2E4\uC218\uC758 \uC801\uC5D0\uAC8C \uB370\uBBF8\uC9C0\uC758
+      n% \uB9CC\uD07C \uD53C\uD574\uB97C \uC785\uD788\uB294 \uC720\uB3C4 \uD3ED\uD0C4\uC744
+      \uBC1C\uC0AC\uD55C\uB2E4. [m\uCD08]"
+    skillType: 0
+    iconIndex: 0
+    isOwned: 0
+    quantity: 0
+    levelFrom0: 0
+    coolTime: 10
+    baseManaConsume: 350
+    skillFullTime: 1
+    animType: 0
+    animParameter: 
+    skillAnimTime: 0
+    equipIndex: 0
+    maxAttackCount: 0
+    baseMultiplier: 1500
+    attackDistance: 3
+    tickUnitTime: 0
   - skillName: "\uCC9C\uAC80 \uAC15\uB9BC"
     rarity: 3
     description: "\uC791\uC740 \uBC94\uC704\uC758 \uC801\uC5D0\uAC8C \uB370\uBBF8\uC9C0\uC758
@@ -183,7 +206,7 @@ MonoBehaviour:
     skillAnimTime: 0
     equipIndex: 0
     maxAttackCount: 0
-    baseMultiplier: 200
+    baseMultiplier: 500
     attackDistance: 0
     tickUnitTime: 0
   - skillName: "\uD654\uC5FC \uAC80\uD48D"
@@ -204,7 +227,7 @@ MonoBehaviour:
     skillAnimTime: 0
     equipIndex: 0
     maxAttackCount: 0
-    baseMultiplier: 150
+    baseMultiplier: 100
     attackDistance: 0
     tickUnitTime: 0
   - skillName: "\uBE59\uACB0\uC758 \uD3EC\uD6A8"
@@ -245,7 +268,7 @@ MonoBehaviour:
     skillAnimTime: 0
     equipIndex: 0
     maxAttackCount: 0
-    baseMultiplier: 150
+    baseMultiplier: 200
     attackDistance: 0
     tickUnitTime: 0
   - skillName: "\uC591\uB0A0 \uBCA0\uAE30"
@@ -266,7 +289,7 @@ MonoBehaviour:
     skillAnimTime: 0
     equipIndex: 0
     maxAttackCount: 0
-    baseMultiplier: 100
+    baseMultiplier: 150
     attackDistance: 0
     tickUnitTime: 0
   playerBuffSkillDatas:
