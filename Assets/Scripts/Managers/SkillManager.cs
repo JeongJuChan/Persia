@@ -269,7 +269,8 @@ public class SkillManager : MonoBehaviour
             switch (active.attackType)
             {
                 case ESkillAttackType.Single:
-                    return CallSkillSingle(active.skillName, out direction, active.isFollowing);
+                    direction = Vector3.zero;
+                    return CallSkillSingle(active.skillName);
                 case ESkillAttackType.Multiple:
                     return CallSkillMultiple(active.skillName, out direction);
             }
@@ -280,11 +281,10 @@ public class SkillManager : MonoBehaviour
     }
 
     // Search Target and Start Skill
-    private bool CallSkillSingle(string skillName, out Vector3 direction, bool isFollowing)
+    private bool CallSkillSingle(string skillName)
     {
         if (!PlayerManager.instance.player.health.SubstractMP(animSkillData[skillName].ManaConsume))
         {
-            direction = Vector3.zero;
             return false;
         }
 
@@ -294,9 +294,8 @@ public class SkillManager : MonoBehaviour
         //     direction = Vector3.zero;
         // else
         //     direction = target.transform.position - transform.position;
-        direction = Vector3.left * PlayerManager.instance.player.spriteController.horizontalDirection;
 
-        StartSingleSkill(skillName, PlayerManager.instance.player.transform.position, direction);
+        StartSingleSkill(skillName);
         return true;
     }
 
@@ -337,24 +336,12 @@ public class SkillManager : MonoBehaviour
     }
 
     // Start Skill
-    private void StartSingleSkill(string skillName, Vector3 center, Vector3 direction)
+    private void StartSingleSkill(string skillName)
     {
         timer[skillName] = animSkillData[skillName].coolTime;
 
         var skill = GetSkillSystem(skillName);
-        if (skill.activeSkillData.isFollowing)
-        {
-            // TODO : 회전 로직 구현
-        }
-        else
-        {
-            skill.transform.position = center;
-            // Debug.Log($"skill direction {direction.x}.{direction.y}.{direction.z}");
-            var dir = GetLeftOrRight(direction);
-            var local = skill.transform.localScale;
-            // Debug.Log($"skill dir {dir.x}.{dir.y}.{dir.z}");
-            skill.transform.localScale = new Vector3(Mathf.Abs(local.x) * dir.x, local.y * dir.y, local.z * dir.z);
-        }
+        
         
         skill.StartSkill();
     }
@@ -479,18 +466,7 @@ public class SkillManager : MonoBehaviour
         return skillIcon[skillDataIconIndex];
     }
 
-    public Vector3 GetLeftOrRight(Vector3 direction)
-    {
-        var dec = Vector2.Dot(direction, Vector2.right);
-        if (dec < 0)
-        {
-            return new Vector3(1, 1, 1);
-        }
-        else
-        {
-            return new Vector3(-1, 1, 1);
-        }
-    }
+    
     
     // TODO skill level up
     public bool TryLevelOneUp<T>(T skill) where T : BaseSkillData

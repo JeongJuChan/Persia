@@ -69,8 +69,52 @@ public class SkillSystem : AttackSystem
     public virtual void StartSkill()
     {
         StartVarSetting(true);
+        Vector3 direction; 
+
+        if (activeSkillData.isFollowing)
+        {
+            float minDistance = float.MaxValue;
+            Transform closeTarget = null;
+            foreach (MonsterData monster in StageManager.instance.GetTargets())
+            {
+                Transform monsterTransform = monster.controller.transform;
+                float distance = Vector.BoxDistance(monsterTransform.position, master.position, 1, 2);
+                if (distance < activeSkillData.attackDistance && distance < minDistance)
+                {
+                    closeTarget = monsterTransform;
+                    minDistance = distance;
+                }
+            }
+            transform.position = closeTarget.position;
+            direction = PlayerManager.instance.transform.position - transform.position;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+            transform.rotation = Quaternion.Euler(0, 0, angle);
+        }
+        else
+        {
+            transform.position = PlayerManager.instance.transform.position;
+            // Debug.Log($"skill direction {direction.x}.{direction.y}.{direction.z}");
+            direction = Vector3.left * PlayerManager.instance.player.spriteController.horizontalDirection;
+            var dir = GetLeftOrRight(direction);
+            // Debug.Log($"skill dir {dir.x}.{dir.y}.{dir.z}");
+            var local = transform.localScale;
+            transform.localScale = new Vector3(Mathf.Abs(local.x) * dir.x, local.y * dir.y, local.z * dir.z);
+        }
 
         StartCoroutine(SingleMeleeSkill());
+    }
+
+    private Vector3 GetLeftOrRight(Vector3 direction)
+    {
+        var dec = Vector2.Dot(direction, Vector2.right);
+        if (dec < 0)
+        {
+            return new Vector3(1, 1, 1);
+        }
+        else
+        {
+            return new Vector3(-1, 1, 1);
+        }
     }
 
     public virtual void StartSkill(Transform transform)
@@ -212,6 +256,7 @@ public class SkillSystem : AttackSystem
     {
         float elapsedTime = .0f;
         float total = .0f;
+
         while (total < activeSkillData.skillFullTime)
         {
             elapsedTime += Time.deltaTime;
