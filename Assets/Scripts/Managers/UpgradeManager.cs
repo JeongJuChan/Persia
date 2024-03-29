@@ -443,8 +443,6 @@ public class AbilityUpgradeInfo
         cost = info.cost;
     }
 
-    
-
     public void Save()
     {
         DataManager.Instance.Save($"{level}_{nameof(title)}", title);
@@ -562,7 +560,7 @@ public class UpgradeManagerEditor : Editor
 
         int length = rows.Length - 1;
 
-        upgrade.abilitydata.SetFixedCostInfoLength(length);
+        upgrade.abilitydata.SetFixedCostInfoLength(length - 1);
 
         for (int i = 1; i < length; i++)
         {
@@ -593,6 +591,8 @@ public class UpgradeManagerEditor : Editor
             return;
         }
 
+
+
         string[] rows = textAsset.text.Split('\n');
 
         Debug.Log(rows[0]);
@@ -604,6 +604,8 @@ public class UpgradeManagerEditor : Editor
 
         // None을 포함하기 때문에 -1
         int rankLength = Enum.GetValues(typeof(Rank)).Length - 1;
+
+        upgrade.abilityUpgradeFixedInfo.Clear();
 
         for (int i = 1; i < length; i++)
         {

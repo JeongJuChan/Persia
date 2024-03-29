@@ -96,6 +96,8 @@ public class HealthSystem
 
     public void SubstractHP(Vector2 direction, AttackData attack)
     {
+        if (attack == null)
+            return;
         BigInteger result = attack.GetDamage(out bool isCrit) * Mathf.FloorToInt(1000+status.currentDamageReduction * 1000) / 1000;
         
         MessageUIManager.instance.ShowDamage(characterPosition.position + damageUIPositionOffset, result, isCrit);

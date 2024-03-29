@@ -223,7 +223,7 @@ public class PlayerManager : MonoBehaviour
         onEquipSkill?.Invoke(slot, skillData);
         equipped_skill[slot] = skillData;
         skillData.isEquipped = true;
-        player.fsm.TryAddState(skillData.animType, new PlayerSkillAttackState(player.fsm, skillData));
+        player.fsm.TryAddState(skillData.GetAnimType(), new PlayerSkillAttackState(player.fsm, skillData));
         skillNamtToSlot.Add(skillData.skillName, slot);
     }
 
@@ -236,7 +236,7 @@ public class PlayerManager : MonoBehaviour
 
         EquippedSkill[slot].isEquipped = false;
         EquippedSkill[slot].SaveEquip(false);
-        player.fsm.TryRemoveState(EquippedSkill[slot].animType);
+        player.fsm.TryRemoveState(EquippedSkill[slot].GetAnimType());
 
         var skillname = EquippedSkill[slot].skillName;
         skillNamtToSlot.Remove(skillname);

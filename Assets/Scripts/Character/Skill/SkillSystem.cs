@@ -57,8 +57,8 @@ public class SkillSystem : AttackSystem
             for (int i = 0; i < attackColliders.Length; ++i)
             {
                 attackColliders[i].InitAttackCollider(data);
-                attackDatas[i] = new AttackData(data, activeSkillData.colliderInfo[i].knockback, activeSkillData.Multiplier+status.currentSkillDamage, activeSkillData.maxAttackCount,
-                    activeSkillData.isContinuous, activeSkillData.tickUnitTime);
+                attackDatas[i] = new AttackData(data, activeSkillData.fixedInfo.colliderInfo[i].knockback, activeSkillData.Multiplier+status.currentSkillDamage, activeSkillData.maxAttackCount,
+                    activeSkillData.fixedInfo.isContinuous, activeSkillData.tickUnitTime);
             }
 
             if (attackRangeSystem != null)
@@ -69,30 +69,15 @@ public class SkillSystem : AttackSystem
     public virtual void StartSkill()
     {
         StartVarSetting(true);
-        Vector3 direction; 
+        Vector3 direction = Vector3.zero; 
 
-        if (activeSkillData.isFollowing)
+        if (activeSkillData.fixedInfo.isFollowing)
         {
-            float minDistance = float.MaxValue;
-            Transform closeTarget = null;
-            foreach (MonsterData monster in StageManager.instance.GetTargets())
-            {
-                Transform monsterTransform = monster.controller.transform;
-                float distance = Vector.BoxDistance(monsterTransform.position, master.position, 1, 2);
-                if (distance < activeSkillData.attackDistance && distance < minDistance)
-                {
-                    closeTarget = monsterTransform;
-                    minDistance = distance;
-                }
-            }
-            transform.position = closeTarget.position;
-            direction = PlayerManager.instance.transform.position - transform.position;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
-            transform.rotation = Quaternion.Euler(0, 0, angle);
+            //SetPositionAndRotationTargetToPlayer(target);
         }
         else
         {
-            transform.position = PlayerManager.instance.transform.position;
+            transform.position = PlayerManager.instance.player.transform.position;
             // Debug.Log($"skill direction {direction.x}.{direction.y}.{direction.z}");
             direction = Vector3.left * PlayerManager.instance.player.spriteController.horizontalDirection;
             var dir = GetLeftOrRight(direction);
@@ -134,6 +119,7 @@ public class SkillSystem : AttackSystem
         for (int i = 0; i < subSkill.Length && i < transforms.Length; ++i)
         {
             Transform target = null;
+
             while (enemy < transforms.Length)
             {
                 if (Utils.Vector.BoxDistance(transforms[enemy].position, master.position, 1, 2) < activeSkillData.attackDistance)
@@ -145,8 +131,30 @@ public class SkillSystem : AttackSystem
                 ++enemy;
             }
 
+            // TODO : 분기
+            if (activeSkillData.fixedInfo.isRotationNeeded)
+            {
+                SetPositionAndRotationTargetToPlayer(target, subSkill[i].transform);
+            }
+            else
+            {
+                if (targetTransform != null)
+                {
+                    if (!targetTransform.gameObject.activeInHierarchy)
+                    {
+                        targetTransform = null;
+                        isTargeting = false;
+                    }
+                    else
+                        transform.position = targetTransform.position;
+                }
+                else
+                    isTargeting = false;
+            }
+            
             if (target != null)
             {
+                // 서브 스킬
                 subSkill[i].StartSkill(target);
                 isPerformed = true;
             }
@@ -156,6 +164,7 @@ public class SkillSystem : AttackSystem
 
         if (isPerformed)
         {
+            // 본 스킬
             StartCoroutine(MultiTargetingSkill());
             return true;
         }
@@ -168,6 +177,19 @@ public class SkillSystem : AttackSystem
         }
     }
 
+    private void SetPositionAndRotationTargetToPlayer(Transform target, Transform skillTransform)
+    {
+        if (target == null)
+            return;
+
+        skillTransform.position = target.position;
+        Vector3 direction = PlayerManager.instance.player.transform.position - target.position;
+        Vector3 normalizedDirection = direction.normalized;
+        float angle = Mathf.Atan2(normalizedDirection.y, normalizedDirection.x) * Mathf.Rad2Deg - 90f;
+        
+        skillTransform.rotation = Quaternion.Euler(0, 0, angle);
+    }
+
     private void StartVarSetting(bool isMaster)
     {
         // elapsedTime = .0f;
@@ -176,7 +198,7 @@ public class SkillSystem : AttackSystem
         // count = 0;
         this.isMaster = isMaster;
         isEnd = false;
-        isTargeting = activeSkillData.isFollowing;
+        isTargeting = activeSkillData.fixedInfo.isFollowing;
     }
 
     public void StopSubSkill()
@@ -212,31 +234,14 @@ public class SkillSystem : AttackSystem
 
             if (!isEnd && !isMaster)
             {
-                // TODO : 분리가 필요할 수 있음
-                if (isTargeting)
-                {
-                    if (targetTransform != null)
-                    {
-                        if (!targetTransform.gameObject.activeInHierarchy)
-                        {
-                            targetTransform = null;
-                            isTargeting = false;
-                        }
-                        else
-                            transform.position = targetTransform.position;
-                    }
-                    else
-                        isTargeting = false;
-                }
-
                 while (attackColliders.Length > colliderDataIndex &&
-                       activeSkillData.colliderInfo[colliderDataIndex].startTime / status.currentAttackSpeed < elapsedTime)
+                       activeSkillData.fixedInfo.colliderInfo[colliderDataIndex].startTime / status.currentAttackSpeed < elapsedTime)
                 {
-                    var atkcol = activeSkillData.colliderInfo[colliderDataIndex];
+                    var atkcol = activeSkillData.fixedInfo.colliderInfo[colliderDataIndex];
                     AttackEvent(atkcol.offset, atkcol.type, atkcol.size, colliderDataIndex, atkcol.knockback,
                         atkcol.duration);
                     ++colliderDataIndex;
-                    if (colliderDataIndex >= activeSkillData.colliderInfo.Length)
+                    if (colliderDataIndex >= activeSkillData.fixedInfo.colliderInfo.Length)
                     {
                         isEnd = true;
                         break;
@@ -257,20 +262,22 @@ public class SkillSystem : AttackSystem
         float elapsedTime = .0f;
         float total = .0f;
 
+        ActiveSkillFixedInfo info = activeSkillData.fixedInfo;
+
         while (total < activeSkillData.skillFullTime)
         {
             elapsedTime += Time.deltaTime;
             total += Time.deltaTime;
             if (!isEnd)
             {
-                while (activeSkillData.colliderInfo.Length > colliderDataIndex && activeSkillData.colliderInfo[colliderDataIndex].startTime / status.currentAttackSpeed < elapsedTime)
+                while (info.colliderInfo.Length > colliderDataIndex && info.colliderInfo[colliderDataIndex].startTime / status.currentAttackSpeed < elapsedTime)
                 {
-                    var atkcol = activeSkillData.colliderInfo[colliderDataIndex];
+                    var atkcol = info.colliderInfo[colliderDataIndex];
                     AttackEvent(atkcol.offset, atkcol.type, atkcol.size, colliderDataIndex, atkcol.knockback, atkcol.duration);
                     ++colliderDataIndex;
-                    if (colliderDataIndex >= activeSkillData.colliderInfo.Length)
+                    if (colliderDataIndex >= info.colliderInfo.Length)
                     {
-                        if (activeSkillData.isRepeat)
+                        if (info.isRepeat)
                         {
                             colliderDataIndex = 0;
                             elapsedTime = - atkcol.duration;

@@ -95,9 +95,6 @@ public abstract class AnimSkillData : BaseSkillData
     [SerializeField] protected int baseManaConsume;
     public float skillFullTime;
 
-    [Header("애니메이션")] public EFsmState animType;
-    public string animParameter;
-    public float skillAnimTime;
     
     public bool isEquipped { get; set; }
     public int equipIndex;
@@ -161,16 +158,15 @@ public abstract class AnimSkillData : BaseSkillData
 
     public abstract bool TryGetShakeTime(int index, out float time);
     public abstract float[] GetShakeTimes();
+    public abstract EFsmState GetAnimType();
+    public abstract string GetAnimParameter();
+    public abstract float GetAnimTime();
 }
 
 [Serializable]
 public class ActiveSkillData : AnimSkillData
 {
-    public ESkillAttackType attackType { get; set; }
-    public bool isFollowing { get; set; } = false;
-    public bool isContinuous { get; set; } = false;
-    public bool isRepeat { get; set; } = false;
-    public AttackColliderInfo[] colliderInfo { get; set; }
+    public ActiveSkillFixedInfo fixedInfo { get; private set; }
 
     [Header("Attack")] public int maxAttackCount = 1;
     public int Multiplier { get; protected set; }
@@ -192,16 +188,8 @@ public class ActiveSkillData : AnimSkillData
 
     public void SetInfo(ActiveSkillFixedInfo info)
     {
-        animType = info.animType;
-        animParameter = info.animParameter;
-        skillAnimTime = info.skillAnimTime;
+        fixedInfo = info;
         iconIndex = info.iconIndex;
-        attackType = info.attackType;
-        isFollowing = info.isFollowing;
-        isContinuous = info.isContinuous;
-        isRepeat = info.isRepeat;
-        attackDistance = info.attackDistance;
-        colliderInfo = info.attackColliderInfos;
     }
 
     public override string GetDescriptionVariable(int index)
@@ -234,9 +222,9 @@ public class ActiveSkillData : AnimSkillData
 
     public override bool TryGetShakeTime(int index, out float time)
     {
-        if (index < colliderInfo.Length)
+        if (index < fixedInfo.colliderInfo.Length)
         {
-            time = colliderInfo[index].shakeTime;
+            time = fixedInfo.colliderInfo[index].shakeTime;
             return true;
         }
 
@@ -246,70 +234,34 @@ public class ActiveSkillData : AnimSkillData
 
     public override float[] GetShakeTimes()
     {
-        float[] ret = new float[colliderInfo.Length];
+        float[] ret = new float[fixedInfo.colliderInfo.Length];
         
         for (int i = 0; i < ret.Length; ++i)
-            ret[i] = colliderInfo[i].shakeTime;
+            ret[i] = fixedInfo.colliderInfo[i].shakeTime;
 
         return ret;
     }
-}
 
-[Serializable]
-public class PassiveSkillData : BaseSkillData
-{
-    [Header("Passive Status")] [SerializeField]
-    protected PassiveStatus baseStatus;
-
-    public PassiveStatus status { get; protected set; }
-
-    public PassiveSkillData(string skillName, ERarity rarity, string description, ESkillType skillType,
-        EStatusType type, int amount) : base(skillName, rarity, description, skillType)
+    public override EFsmState GetAnimType()
     {
-        baseStatus = new PassiveStatus(type, amount);
-        status = new PassiveStatus(baseStatus.target, baseStatus.buff * (1 + levelFrom0));
+        return fixedInfo.animType;
     }
 
-    public void SetInfo(PassiveSkillFixedInfo info)
+    public override string GetAnimParameter()
     {
-        iconIndex = info.iconIndex;
+        return fixedInfo.animParameter;
     }
 
-    public override string GetDescriptionVariable(int index)
+    public override float GetAnimTime()
     {
-        return status.buff.ToString();
-    }
-
-    public override void Load()
-    {
-        base.Load();
-        status = new PassiveStatus(baseStatus.target, baseStatus.buff * (1 + levelFrom0));
-
-        if (isOwned)
-        {
-            // TODO : not good
-            PlayerManager.instance.AddPassiveToList(status);
-        }
-    }
-
-    public override bool TryLevelUp()
-    {
-        if (base.TryLevelUp())
-        {
-            // TODO : not good
-            PlayerManager.instance.RemovePassiveToList(status);
-            status = new PassiveStatus(baseStatus.target, baseStatus.buff * (1 + levelFrom0));
-            PlayerManager.instance.AddPassiveToList(status);
-            return true;
-        }
-
-        return false;
+        return fixedInfo.skillAnimTime;
     }
 }
 
 [Serializable]
 public class BuffSkillData : AnimSkillData
 {
+    public BuffSkillFixedInfo fixedInfo { get; private set; }
     public TempBuffStatus tempBuffStatus { get; protected set; }
 
     [Header("Buff Status")]
@@ -329,9 +281,7 @@ public class BuffSkillData : AnimSkillData
 
     public void SetInfo(BuffSkillFixedInfo info)
     {
-        animType = info.animType;
-        animParameter = info.animParameter;
-        skillAnimTime = info.skillAnimTime;
+        fixedInfo = info;
         iconIndex = info.iconIndex;
     }
 
@@ -394,6 +344,74 @@ public class BuffSkillData : AnimSkillData
     public override float[] GetShakeTimes()
     {
         return shakeTime;
+    }
+
+    public override EFsmState GetAnimType()
+    {
+        return fixedInfo.animType;
+    }
+
+    public override string GetAnimParameter()
+    {
+        return fixedInfo.animParameter;
+    }
+
+    public override float GetAnimTime()
+    {
+        return fixedInfo.skillAnimTime;
+    }
+}
+
+[Serializable]
+public class PassiveSkillData : BaseSkillData
+{
+    [Header("Passive Status")]
+    [SerializeField]
+    protected PassiveStatus baseStatus;
+
+    public PassiveStatus status { get; protected set; }
+
+    public PassiveSkillData(string skillName, ERarity rarity, string description, ESkillType skillType,
+        EStatusType type, int amount) : base(skillName, rarity, description, skillType)
+    {
+        baseStatus = new PassiveStatus(type, amount);
+        status = new PassiveStatus(baseStatus.target, baseStatus.buff * (1 + levelFrom0));
+    }
+
+    public void SetInfo(PassiveSkillFixedInfo info)
+    {
+        iconIndex = info.iconIndex;
+    }
+
+    public override string GetDescriptionVariable(int index)
+    {
+        return status.buff.ToString();
+    }
+
+    public override void Load()
+    {
+        base.Load();
+        status = new PassiveStatus(baseStatus.target, baseStatus.buff * (1 + levelFrom0));
+
+        if (isOwned)
+        {
+            // TODO : not good
+            PlayerManager.instance.AddPassiveToList(status);
+        }
+    }
+
+    public override bool TryLevelUp()
+    {
+        if (base.TryLevelUp())
+        {
+            // TODO : not good
+            PlayerManager.instance.RemovePassiveToList(status);
+            status = new PassiveStatus(baseStatus.target, baseStatus.buff * (1 + levelFrom0));
+            PlayerManager.instance.AddPassiveToList(status);
+            return true;
+        }
+
+        return false;
     }
 }
 

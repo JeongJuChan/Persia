@@ -266,7 +266,7 @@ public class SkillManager : MonoBehaviour
     {
         if (animSkillData[skillName] is ActiveSkillData active)
         {
-            switch (active.attackType)
+            switch (active.fixedInfo.attackType)
             {
                 case ESkillAttackType.Single:
                     direction = Vector3.zero;

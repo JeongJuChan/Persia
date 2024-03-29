@@ -143,9 +143,9 @@ public class PlayerComboAttackState : PlayerAttackState
         base.PhysicsUpdate();
     }
 
-    public override void ActOnActiveSkill(Vector3 direction, string skillName)
+    public override void ActOnUsableSkill(Vector3 direction, string skillName)
     {
-        base.ActOnActiveSkill(direction, skillName);
+        base.ActOnUsableSkill(direction, skillName);
         
         combo = 0;
         if (!isAttackPerformed)
@@ -193,14 +193,14 @@ public class PlayerSkillAttackState : PlayerSkillState
         elapsedTime = .0f;
         shakeIndex = 0;
         stateMachine.movement.StopMove();
-        StartAnimation(Animator.StringToHash(animSkillInfo.animParameter));
+        StartAnimation(Animator.StringToHash(animSkillInfo.GetAnimParameter()));
     }
 
     public override void Exit()
     {
         base.Exit();
 
-        StopAnimation(Animator.StringToHash(animSkillInfo.animParameter));
+        StopAnimation(Animator.StringToHash(animSkillInfo.GetAnimParameter()));
     }
 
     public override void Update()
@@ -218,7 +218,7 @@ public class PlayerSkillAttackState : PlayerSkillState
             }
         }
 
-        if (elapsedTime > animSkillInfo.skillAnimTime)
+        if (elapsedTime > animSkillInfo.GetAnimTime())
         {
             stateMachine.controller.CallIdle();
         }

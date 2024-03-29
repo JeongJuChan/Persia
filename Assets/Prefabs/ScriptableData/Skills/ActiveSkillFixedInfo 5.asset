@@ -14,15 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: "\uBE59\uACB0\uC758 \uD3EC\uD6A8"
   iconIndex: 9
-  animType: 11
-  animParameter: Skill4
-  skillAnimTime: 0.5
-  attackType: 0
-  isFollowing: 0
-  isContinuous: 0
-  isRepeat: 0
-  attackDistance: 0
-  attackColliderInfos:
+  <animType>k__BackingField: 11
+  <animParameter>k__BackingField: Skill4
+  <skillAnimTime>k__BackingField: 0.5
+  <attackType>k__BackingField: 0
+  <isFollowing>k__BackingField: 0
+  <isContinuous>k__BackingField: 0
+  <isRepeat>k__BackingField: 0
+  <isRotationNeeded>k__BackingField: 0
+  <attackDistance>k__BackingField: 0
+  <colliderInfo>k__BackingField:
   - type: 1
     size: 0.1
     knockback: 30

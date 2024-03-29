@@ -18,7 +18,7 @@ public class PlayerBaseState : BaseState
         if (!ReferenceEquals(playerController, null))
         {
             playerController.onDashStart += ActOnDashStart;
-            playerController.onActiveSkill += ActOnActiveSkill;
+            playerController.onActiveSkill += ActOnUsableSkill;
         }
     }
 
@@ -28,7 +28,7 @@ public class PlayerBaseState : BaseState
         if (!ReferenceEquals(playerController, null))
         {
             playerController.onDashStart -= ActOnDashStart;
-            playerController.onActiveSkill -= ActOnActiveSkill;
+            playerController.onActiveSkill -= ActOnUsableSkill;
         }
     }
 

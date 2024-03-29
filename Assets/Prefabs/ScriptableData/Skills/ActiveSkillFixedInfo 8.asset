@@ -14,60 +14,60 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: "\uCC9C\uAC80 \uBC1C\uD0A4\uB9AC"
   iconIndex: 17
-  animType: 14
-  animParameter: Skill2
-  skillAnimTime: 0.5
-  animation: {fileID: 7400000, guid: 3ed7a2b4bf392be4cb31ce7ae9c0899e, type: 2}
-  attackType: 0
-  isFollowing: 1
-  isContinuous: 0
-  isRepeat: 1
-  attackDistance: 3
-  attackColliderInfos:
+  <animType>k__BackingField: 14
+  <animParameter>k__BackingField: Skill2
+  <skillAnimTime>k__BackingField: 0.4
+  <attackType>k__BackingField: 1
+  <isFollowing>k__BackingField: 1
+  <isContinuous>k__BackingField: 0
+  <isRepeat>k__BackingField: 0
+  <isRotationNeeded>k__BackingField: 1
+  <attackDistance>k__BackingField: 3
+  <colliderInfo>k__BackingField:
   - type: 0
-    size: 0.3
+    size: 0
     knockback: 40
     startTime: 0
     duration: 0
-    offset: {x: -0.08, y: -0.34, z: 0}
+    offset: {x: -0.08, y: -0.33999997, z: 0}
     shakeTime: 0
   - type: 0
-    size: 0.3
+    size: 0
     knockback: 40
     startTime: 0
     duration: 0
-    offset: {x: 0.48, y: -0.47, z: 0}
+    offset: {x: 0.48000002, y: -0.46999997, z: 0}
     shakeTime: 0
   - type: 0
-    size: 0.3
+    size: 0
     knockback: 40
     startTime: 0
     duration: 0
-    offset: {x: -0.21, y: -0.64, z: 0}
+    offset: {x: -0.21, y: -0.64000005, z: 0}
     shakeTime: 0
   - type: 0
-    size: 0.3
+    size: 0
     knockback: 40
     startTime: 0
     duration: 0
-    offset: {x: 0.22, y: -0.57, z: 0}
+    offset: {x: -0.08, y: -0.33999997, z: 0}
     shakeTime: 0
   - type: 0
-    size: 0.3
+    size: 0
     knockback: 40
     startTime: 0
     duration: 0
-    offset: {x: -0.08, y: -0.34, z: 0}
+    offset: {x: -0.08, y: -0.33999997, z: 0}
     shakeTime: 0
   - type: 0
-    size: 0.3
+    size: 0
     knockback: 40
     startTime: 0
     duration: 0
     offset: {x: -0.5, y: -0.48, z: 0}
     shakeTime: 0
   - type: 0
-    size: 0.3
+    size: 0
     knockback: 40
     startTime: 0
     duration: 0

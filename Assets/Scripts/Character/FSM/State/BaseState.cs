@@ -65,10 +65,11 @@ public class BaseState : IState
     {
         stateMachine.TryChangeState(EFsmState.Dash);
     }
-
-    public virtual void ActOnActiveSkill(Vector3 direction, string skillName)
+    
+    // 버프 + 액티브 포함 호출
+    public virtual void ActOnUsableSkill(Vector3 direction, string skillName)
     {
-        stateMachine.TryChangeState(SkillManager.instance.GetSkill(skillName).animType);
+        stateMachine.TryChangeState(SkillManager.instance.GetSkill(skillName).GetAnimType());
     }
 
     public virtual void StartAnimation(int hash)
